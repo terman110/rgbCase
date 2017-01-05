@@ -1,0 +1,6 @@
+{
+  "ComPort": "COM3",
+  "BaudRate": 115200,
+  "Color": "255, 159, 0",
+  "Brightness": 254
+}

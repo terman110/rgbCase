@@ -1,0 +1,13 @@
+C:\Users\jan\Documents\GitHub\rgbCase\rgbCase\rgbCase\bin\Debug\rgbCase.exe.config
+C:\Users\jan\Documents\GitHub\rgbCase\rgbCase\rgbCase\bin\Debug\rgbCase.exe
+C:\Users\jan\Documents\GitHub\rgbCase\rgbCase\rgbCase\bin\Debug\rgbCase.pdb
+C:\Users\jan\Documents\GitHub\rgbCase\rgbCase\rgbCase\obj\Debug\rgbCase.csprojResolveAssemblyReference.cache
+C:\Users\jan\Documents\GitHub\rgbCase\rgbCase\rgbCase\obj\Debug\rgbCase.Properties.Resources.resources
+C:\Users\jan\Documents\GitHub\rgbCase\rgbCase\rgbCase\obj\Debug\rgbCase.csproj.GenerateResource.Cache
+C:\Users\jan\Documents\GitHub\rgbCase\rgbCase\rgbCase\obj\Debug\rgbCase.exe
+C:\Users\jan\Documents\GitHub\rgbCase\rgbCase\rgbCase\obj\Debug\rgbCase.pdb
+C:\Users\jan\Documents\GitHub\rgbCase\rgbCase\rgbCase\obj\Debug\rgbCase.MainForm.resources
+C:\Users\jan\Documents\GitHub\rgbCase\rgbCase\rgbCase\bin\Debug\Newtonsoft.Json.dll
+C:\Users\jan\Documents\GitHub\rgbCase\rgbCase\rgbCase\bin\Debug\Newtonsoft.Json.xml
+C:\Users\jan\Documents\GitHub\rgbCase\rgbCase\rgbCase\bin\Debug\Cyotek.Windows.Forms.ColorPicker.dll
+C:\Users\jan\Documents\GitHub\rgbCase\rgbCase\rgbCase\bin\Debug\Cyotek.Windows.Forms.ColorPicker.pdb

@@ -1,0 +1,9 @@
+C:\Users\jan\Documents\GitHub\rgbCase\rgbCase\Cyotek.Windows.Forms.ColorPicker\bin\Debug\Cyotek.Windows.Forms.ColorPicker.dll
+C:\Users\jan\Documents\GitHub\rgbCase\rgbCase\Cyotek.Windows.Forms.ColorPicker\bin\Debug\Cyotek.Windows.Forms.ColorPicker.pdb
+C:\Users\jan\Documents\GitHub\rgbCase\rgbCase\Cyotek.Windows.Forms.ColorPicker\obj\Debug\Cyotek.Windows.Forms.ColorPicker.csprojResolveAssemblyReference.cache
+C:\Users\jan\Documents\GitHub\rgbCase\rgbCase\Cyotek.Windows.Forms.ColorPicker\obj\Debug\Cyotek.Windows.Forms.Properties.Resources.resources
+C:\Users\jan\Documents\GitHub\rgbCase\rgbCase\Cyotek.Windows.Forms.ColorPicker\obj\Debug\Cyotek.Windows.Forms.ColorPickerDialog.resources
+C:\Users\jan\Documents\GitHub\rgbCase\rgbCase\Cyotek.Windows.Forms.ColorPicker\obj\Debug\Cyotek.Windows.Forms.ColorEditor.resources
+C:\Users\jan\Documents\GitHub\rgbCase\rgbCase\Cyotek.Windows.Forms.ColorPicker\obj\Debug\Cyotek.Windows.Forms.ColorPicker.csproj.GenerateResource.Cache
+C:\Users\jan\Documents\GitHub\rgbCase\rgbCase\Cyotek.Windows.Forms.ColorPicker\obj\Debug\Cyotek.Windows.Forms.ColorPicker.dll
+C:\Users\jan\Documents\GitHub\rgbCase\rgbCase\Cyotek.Windows.Forms.ColorPicker\obj\Debug\Cyotek.Windows.Forms.ColorPicker.pdb
