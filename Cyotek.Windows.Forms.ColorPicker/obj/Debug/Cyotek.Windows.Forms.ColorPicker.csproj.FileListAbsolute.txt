@@ -7,3 +7,5 @@ C:\Users\jan\Documents\GitHub\rgbCase\rgbCase\Cyotek.Windows.Forms.ColorPicker\o
 C:\Users\jan\Documents\GitHub\rgbCase\rgbCase\Cyotek.Windows.Forms.ColorPicker\obj\Debug\Cyotek.Windows.Forms.ColorPicker.csproj.GenerateResource.Cache
 C:\Users\jan\Documents\GitHub\rgbCase\rgbCase\Cyotek.Windows.Forms.ColorPicker\obj\Debug\Cyotek.Windows.Forms.ColorPicker.dll
 C:\Users\jan\Documents\GitHub\rgbCase\rgbCase\Cyotek.Windows.Forms.ColorPicker\obj\Debug\Cyotek.Windows.Forms.ColorPicker.pdb
+C:\Users\jan\Documents\GitHub\rgbCase\rgbCase\Cyotek.Windows.Forms.ColorPicker\bin\Debug\Cyotek.Windows.Forms.ColorPicker.dll.CodeAnalysisLog.xml
+C:\Users\jan\Documents\GitHub\rgbCase\rgbCase\Cyotek.Windows.Forms.ColorPicker\bin\Debug\Cyotek.Windows.Forms.ColorPicker.dll.lastcodeanalysissucceeded

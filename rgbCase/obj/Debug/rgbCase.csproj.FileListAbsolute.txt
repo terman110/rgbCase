@@ -11,3 +11,5 @@ C:\Users\jan\Documents\GitHub\rgbCase\rgbCase\rgbCase\bin\Debug\Newtonsoft.Json.
 C:\Users\jan\Documents\GitHub\rgbCase\rgbCase\rgbCase\bin\Debug\Newtonsoft.Json.xml
 C:\Users\jan\Documents\GitHub\rgbCase\rgbCase\rgbCase\bin\Debug\Cyotek.Windows.Forms.ColorPicker.dll
 C:\Users\jan\Documents\GitHub\rgbCase\rgbCase\rgbCase\bin\Debug\Cyotek.Windows.Forms.ColorPicker.pdb
+C:\Users\jan\Documents\GitHub\rgbCase\rgbCase\rgbCase\bin\Debug\rgbCase.exe.CodeAnalysisLog.xml
+C:\Users\jan\Documents\GitHub\rgbCase\rgbCase\rgbCase\bin\Debug\rgbCase.exe.lastcodeanalysissucceeded

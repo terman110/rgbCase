@@ -66,7 +66,9 @@ namespace rgbCase
         string mPortName = "COM1";
         int mBaud = 115200;
         Int32 mLastReceived = Timestamp;
-        const Int32 cTimeout_s = 5;
+        Int32 mLastSend = Timestamp;
+        const Int32 cTimeout_ms = 5000;
+        const Int32 cMinDurationDuringMsg_ms = 10;
         Task mAliveTask;
         CancellationTokenSource mCancelTasks = new CancellationTokenSource();
         Thread mStartingThread;
@@ -94,7 +96,7 @@ namespace rgbCase
             Connect(portName, baud);
         }
 
-        static public Int32 Timestamp { get { return (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds; ; } }
+        static public Int32 Timestamp { get { return (Int32)(DateTime.UtcNow.Subtract(new DateTime(2017, 1, 1))).TotalMilliseconds; ; } }
 
         public bool Connected { get { return mPort != null; } }
 
@@ -135,7 +137,7 @@ namespace rgbCase
                                     if (mCancelTasks.IsCancellationRequested)
                                         return;
 
-                                    if (Timestamp - mLastReceived > cTimeout_s)
+                                    if (Timestamp - mLastReceived > cTimeout_ms)
                                     {
                                         if (!bHeartBeatRequested)
                                         {
@@ -237,71 +239,84 @@ namespace rgbCase
             if (mPort == null)
                 return;
 
-            switch (e.EventType)
+            while (mPort.BytesToRead > 0)
             {
-                case SerialData.Chars:
-                    MessageType nType;
-                    byte bD0, bD1, bD2;
-                    string sMsg = GetLatestMessage(out nType, out bD0, out bD1, out bD2);
-                    if (string.IsNullOrWhiteSpace(sMsg))
-                        return;
+                switch (e.EventType)
+                {
+                    case SerialData.Chars:
+                        MessageType nType;
+                        byte bD0, bD1, bD2;
+                        string sMsg = GetLatestMessage(out nType, out bD0, out bD1, out bD2);
+                        if (string.IsNullOrWhiteSpace(sMsg))
+                            return;
 
-                    mLastReceived = Timestamp;
+                        mLastReceived = Timestamp;
 
-                    switch (nType)
-                    {
-                        case MessageType.Error:
-                            if (StateChangeReceived != null)
-                                StateChangeReceived(StateType.UnknownError, "Last command failed [" + sMsg + "]");
-                            break;
-                    }
+                        switch (nType)
+                        {
+                            case MessageType.Error:
+                                if (StateChangeReceived != null)
+                                    StateChangeReceived(StateType.UnknownError, "Last command failed [" + sMsg + "]");
+                                break;
+                        }
 
-                    if (MessageReceived != null)
-                        MessageReceived(nType, sMsg);
-                    break;
-                case SerialData.Eof:
-                    break;
+                        if (MessageReceived != null)
+                            MessageReceived(nType, sMsg);
+                        break;
+                    case SerialData.Eof:
+                        break;
+                }
             }
         }
 
         private string GetLatestMessage(out MessageType nType, out byte bD0, out byte bD1, out byte bD2)
         {
             string sMsg = "";
-            int nCnt = mPort.BytesToRead;
-            int nByte;
-            List<byte> lBytes = new List<byte>();
-            while (nCnt > 0)
+            try
             {
-                nByte = mPort.ReadByte();
-                if (lBytes.Count == 0 && nByte == 0x0f)
-                    lBytes.Add((byte)nByte);
-                else if (lBytes.Count > 0)
+                int nCnt = mPort.BytesToRead;
+                int nByte;
+                List<byte> lBytes = new List<byte>();
+                while (nCnt > 0)
                 {
-                    lBytes.Add((byte)nByte);
-                    if (lBytes.Count == 6 && nByte == 0xff)
+                    nByte = mPort.ReadByte();
+                    if (lBytes.Count == 0 && nByte == 0x0f)
+                        lBytes.Add((byte)nByte);
+                    else if (lBytes.Count > 0)
                     {
-                        bD0 = lBytes[2];
-                        bD1 = lBytes[3];
-                        bD2 = lBytes[4];
-                        switch (lBytes[1])
+                        lBytes.Add((byte)nByte);
+                        if (lBytes.Count == 6 && nByte == 0xff)
                         {
-                            case 0x01: nType = MessageType.HeartBeat; break;
-                            case 0x03: nType = MessageType.Brightness; break;
-                            case 0x05: nType = MessageType.Mode; break;
-                            case 0x07: nType = MessageType.Color; break;
-                            case 0xff: nType = MessageType.Error; break;
-                            default: nType = MessageType.GenericMessage; break;
+                            bD0 = lBytes[2];
+                            bD1 = lBytes[3];
+                            bD2 = lBytes[4];
+                            switch (lBytes[1])
+                            {
+                                case 0x01: nType = MessageType.HeartBeat; break;
+                                case 0x03: nType = MessageType.Brightness; break;
+                                case 0x05: nType = MessageType.Mode; break;
+                                case 0x07: nType = MessageType.Color; break;
+                                case 0xff: nType = MessageType.Error; break;
+                                default: nType = MessageType.GenericMessage; break;
+                            }
+                            return BitConverter.ToString(lBytes.ToArray());
                         }
-                        return BitConverter.ToString(lBytes.ToArray());
                     }
+                    sMsg += Convert.ToChar(nByte);
+                    nCnt--;
                 }
-                sMsg += Convert.ToChar(nByte);
-                nCnt--;
+                nType = MessageType.GenericMessage;
+                bD0 = 0x00;
+                bD1 = 0x00;
+                bD2 = 0x00;
             }
-            nType = MessageType.GenericMessage;
-            bD0 = 0x00;
-            bD1 = 0x00;
-            bD2 = 0x00;
+            catch
+            {
+                nType = MessageType.Unknown;
+                bD0 = 0x00;
+                bD1 = 0x00;
+                bD2 = 0x00;
+            }
             return sMsg;
         }
                 
@@ -350,13 +365,21 @@ namespace rgbCase
             if (aBytes == null || !Connected || !mPort.IsOpen)
                 return;
 
-            try
+            Task.Factory.StartNew(() =>
             {
-                mPort.Write(aBytes, 0, aBytes.Length);
-                if (MessageSend != null)
-                    MessageSend(nType, BitConverter.ToString(aBytes));
-            }
-            catch { }
+                try
+                {
+                    Int32 currentTime = Timestamp;
+                    if (currentTime - mLastSend < cMinDurationDuringMsg_ms)
+                        return;
+                    mLastSend = currentTime;
+
+                    mPort.Write(aBytes, 0, aBytes.Length);
+                    if (MessageSend != null)
+                        MessageSend(nType, BitConverter.ToString(aBytes));
+                }
+                catch { }
+            });
         }
 
         public void Send(string sMsg, MessageType nType = MessageType.GenericMessage)

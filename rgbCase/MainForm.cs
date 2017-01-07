@@ -155,7 +155,7 @@ namespace rgbCase
                 Invoke(new ArduinoController.StateChangeReceivedHandler(MCtrl_StateChangeReceived), new object[] { nType, sMessage });
                 return;
             }
-            txtLog.AppendText("[SC] " + nType.ToString() + ": " + sMessage.ToString() + Environment.NewLine);
+            txtLog.AppendText(DateTime.Now.ToString("HH:MM:SS.fff") + " [SC] " + nType.ToString() + ": " + sMessage.ToString() + Environment.NewLine);
             LineCheck();
         }
 
@@ -168,7 +168,7 @@ namespace rgbCase
                 Invoke(new ArduinoController.MessageReceivedHandler(MCtrl_MessageReceived), new object[] { nType, sMessage });
                 return;
             }
-            txtLog.AppendText("[<-] " + nType.ToString() + ": " + sMessage.ToString() + Environment.NewLine);
+            txtLog.AppendText(DateTime.Now.ToString("HH:MM:SS.fff") + " [<-] " + nType.ToString() + ": " + sMessage.ToString() + Environment.NewLine);
             LineCheck();
         }
 
@@ -181,7 +181,7 @@ namespace rgbCase
                 Invoke(new ArduinoController.MessageSendHandler(MCtrl_MessageSend), new object[] { nType, sMessage });
                 return;
             }
-            txtLog.AppendText("[->] " + nType.ToString() + ": " + sMessage.ToString() + Environment.NewLine);
+            txtLog.AppendText(DateTime.Now.ToString("HH:MM:SS.fff") + " [->] " + nType.ToString() + ": " + sMessage.ToString() + Environment.NewLine);
             LineCheck();
         }
 

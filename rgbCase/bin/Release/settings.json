@@ -1,8 +1,8 @@
 {
   "ComPort": "COM3",
   "BaudRate": 115200,
-  "Color": "74, 0, 0",
-  "Brightness": 255,
+  "Color": "189, 0, 0",
+  "Brightness": 245,
   "Mode": 3,
   "Breathing_Min": 32,
   "Breathing_Max": 255,
