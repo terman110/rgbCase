@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Threading;
-
-using System.IO.Ports;
-
-using System.IO;
 using System.Collections.Generic;
 using System.Drawing;
+using System.IO;
+using System.IO.Ports;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace rgbCase
 {
@@ -66,6 +65,11 @@ namespace rgbCase
         SerialPort mPort;
         string mPortName = "COM1";
         int mBaud = 115200;
+        Int32 mLastReceived = Timestamp;
+        const Int32 cTimeout_s = 5;
+        Task mAliveTask;
+        CancellationTokenSource mCancelTasks = new CancellationTokenSource();
+        Thread mStartingThread;
 
         static public string[] AvailablePorts { get { return SerialPort.GetPortNames(); } }
         static public int[] AvailableBaudRates { get { return new int[] { 300, 600, 1200, 2400, 4800, 9600, 14400, 19200, 28800, 38400, 57600, 115200 }; } }
@@ -78,15 +82,19 @@ namespace rgbCase
 
         public delegate void StateChangeReceivedHandler(StateType nType, string sMessage);
         public event StateChangeReceivedHandler StateChangeReceived;
-
+        
         public ArduinoController()
-        { }
+        {
+            mStartingThread = Thread.CurrentThread;
+        }
 
         public ArduinoController(string portName, int baud)
             : this()
         {
             Connect(portName, baud);
         }
+
+        static public Int32 Timestamp { get { return (Int32)(DateTime.UtcNow.Subtract(new DateTime(1970, 1, 1))).TotalSeconds; ; } }
 
         public bool Connected { get { return mPort != null; } }
 
@@ -112,13 +120,100 @@ namespace rgbCase
                     Settings.Instance.ComPort = mPortName;
                     Settings.Save();
                 }
+
+                mCancelTasks = new CancellationTokenSource();
+                mAliveTask = new Task(
+                    () => {
+                        try
+                        {
+                            // specify this thread's Abort() as the cancel delegate
+                            using (mCancelTasks.Token.Register(Thread.CurrentThread.Abort))
+                            {
+                                bool bHeartBeatRequested = false;
+                                while (true)
+                                {
+                                    if (mCancelTasks.IsCancellationRequested)
+                                        return;
+
+                                    if (Timestamp - mLastReceived > cTimeout_s)
+                                    {
+                                        if (!bHeartBeatRequested)
+                                        {
+                                            bHeartBeatRequested = true;
+                                            Task.Factory.StartNew(() => RequestHeartBeat());
+                                        }
+                                        else
+                                        {
+                                            Task.Factory.StartNew(() => Reconnect());
+                                            return;
+                                        }
+                                    }
+                                    else if (bHeartBeatRequested)
+                                        bHeartBeatRequested = false;
+
+                                    Thread.Sleep(1000);
+                                }
+                            }
+                        }
+                        catch
+                        {
+                            return;
+                        }
+                    }, mCancelTasks.Token);
+                mAliveTask.Start();
+            }
+            catch { }
+
+            return Connected;
+        }
+        
+        public void Disconnect()
+        {
+            if (!Connected)
+                return;
+
+            if (mCancelTasks != null)
+            {
+                try { mCancelTasks.Cancel(); }
+                catch  { }
+                try { mCancelTasks.Dispose(); }
+                catch { }
+                mCancelTasks = null;
+            }
+
+            if (mAliveTask != null)
+            {
+                try { mAliveTask.Dispose(); }
+                catch { }
+                mAliveTask = null;
+            }
+
+            try
+            {
+                mPortName = string.Empty;
+                mBaud = 115200;
+
+                mPort.DataReceived -= MPort_DataReceived;
+                mPort.ErrorReceived -= MPort_ErrorReceived;
+
+                mPort.Close();
+                mPort.Dispose();
             }
             catch
             {
 
             }
+            finally
+            {
+                mPort = null;
+                if (StateChangeReceived != null)
+                    StateChangeReceived(StateType.Disconnected, string.Empty);
+            }
+        }
 
-            return Connected;
+        public void Reconnect()
+        {
+            Connect(mPortName, mBaud);
         }
 
         private void MPort_ErrorReceived(object sender, SerialErrorReceivedEventArgs e)
@@ -151,6 +246,8 @@ namespace rgbCase
                     if (string.IsNullOrWhiteSpace(sMsg))
                         return;
 
+                    mLastReceived = Timestamp;
+
                     switch (nType)
                     {
                         case MessageType.Error:
@@ -161,7 +258,6 @@ namespace rgbCase
 
                     if (MessageReceived != null)
                         MessageReceived(nType, sMsg);
-                    System.Diagnostics.Trace.TraceInformation(sMsg);
                     break;
                 case SerialData.Eof:
                     break;
@@ -208,48 +304,14 @@ namespace rgbCase
             bD2 = 0x00;
             return sMsg;
         }
-
-        public void Disconnect()
-        {
-            if (!Connected)
-                return;
-
-            try
-            {
-                mPortName = string.Empty;
-                mBaud = 115200;
-
-                mPort.DataReceived -= MPort_DataReceived;
-                mPort.ErrorReceived -= MPort_ErrorReceived;
-
-                mPort.Close();
-                mPort.Dispose();
-            }
-            catch
-            {
-
-            }
-            finally
-            {
-                mPort = null;
-                if (StateChangeReceived != null)
-                    StateChangeReceived(StateType.Disconnected, string.Empty);
-            }
-        }
-
+                
         public void RequestHeartBeat()
         {
             if (!Connected || !mPort.IsOpen)
                 return;
 
-            try
-            {
-                Send(MessageType.HeartBeat);
-            }
-            catch (Exception e)
-            {
-
-            }
+            try { Send(MessageType.HeartBeat); }
+            catch { }
         }
 
         public void RequestColor(Color c)
@@ -257,14 +319,8 @@ namespace rgbCase
             if (!Connected || !mPort.IsOpen)
                 return;
 
-            try
-            {
-                Send(MessageType.Color, c.R, c.G, c.B);
-            }
-            catch (Exception e)
-            {
-
-            }
+            try { Send(MessageType.Color, c.R, c.G, c.B); }
+            catch { }
         }
 
         public void RequestBrightness(byte value)
@@ -272,14 +328,8 @@ namespace rgbCase
             if (!Connected || !mPort.IsOpen)
                 return;
 
-            try
-            {
-                Send(MessageType.Brightness, value);
-            }
-            catch (Exception e)
-            {
-
-            }
+            try { Send(MessageType.Brightness, value); }
+            catch { }
         }
 
         private void Send(MessageType nType, byte bD0 = 0x00, byte bD1 = 0x00, byte bD2 = 0x00)
@@ -306,7 +356,7 @@ namespace rgbCase
                 if (MessageSend != null)
                     MessageSend(nType, BitConverter.ToString(aBytes));
             }
-            catch (Exception e) { }
+            catch { }
         }
 
         public void Send(string sMsg, MessageType nType = MessageType.GenericMessage)
@@ -320,7 +370,7 @@ namespace rgbCase
                 if (MessageSend != null)
                     MessageSend(nType, sMsg);
             }
-            catch (Exception e) { }
+            catch { }
         }
 
         public void Dispose()

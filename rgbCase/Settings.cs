@@ -16,6 +16,19 @@ namespace rgbCase
         public int BaudRate { get; set; } = 115200;
         public Color Color { get; set; } = Color.Red;
         public byte Brightness { get; set; } = 255;
+        public EModes Mode { get; set; } = EModes.Static;
+
+        public byte Breathing_Min { get; set; } = 32;
+        public byte Breathing_Max { get; set; } = 255;
+        public uint Breathing_Sleep_ms { get; set; } = 9;
+
+        public byte Strobing_Min { get; set; } = 0;
+        public byte Strobing_Max { get; set; } = 255;
+        public uint Strobing_Sleep_ms { get; set; } = 250;
+
+        public uint ColorCycle_Sleep_ms { get; set; } = 9;
+        [JsonIgnore]
+        public uint ColorCycle_State { get; set; } = 0;
 
         #region Instance
         private Settings() { }

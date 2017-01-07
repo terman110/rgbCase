@@ -17,7 +17,7 @@ namespace rgbCase
         private ArduinoController mCtrl = null;
         private byte mBrightness = 255;
         private Brush _textureBrush;
-
+                
         public MainForm()
         {
             InitializeComponent();
@@ -41,6 +41,10 @@ namespace rgbCase
             Color = Settings.Instance.Color;
 
             Task.Factory.StartNew(() => btnConnect_Click(null, null));
+
+            comboMode.Items.AddRange(Enum.GetNames(typeof(EModes)));
+            if (comboMode.Items.Contains(Settings.Instance.Mode.ToString()))
+                comboMode.SelectedIndex = comboMode.Items.IndexOf(Settings.Instance.Mode.ToString());
         }
 
         private void btnConnect_Click(object sender, EventArgs e)
@@ -141,9 +145,11 @@ namespace rgbCase
                 btnConnect.Enabled = true;
             }
         }
-
+        
         private void MCtrl_StateChangeReceived(ArduinoController.StateType nType, string sMessage)
         {
+            //if (!checkLog.Checked)
+            //    return;
             if (InvokeRequired)
             {
                 Invoke(new ArduinoController.StateChangeReceivedHandler(MCtrl_StateChangeReceived), new object[] { nType, sMessage });
@@ -155,7 +161,9 @@ namespace rgbCase
 
         private void MCtrl_MessageReceived(ArduinoController.MessageType nType, string sMessage)
         {
-            if(InvokeRequired)
+            if (!checkLog.Checked)
+                return;
+            if (InvokeRequired)
             {
                 Invoke(new ArduinoController.MessageReceivedHandler(MCtrl_MessageReceived), new object[] { nType, sMessage });
                 return;
@@ -166,6 +174,8 @@ namespace rgbCase
 
         private void MCtrl_MessageSend(ArduinoController.MessageType nType, string sMessage)
         {
+            if (!checkLog.Checked)
+                return;
             if (InvokeRequired)
             {
                 Invoke(new ArduinoController.MessageSendHandler(MCtrl_MessageSend), new object[] { nType, sMessage });
@@ -230,10 +240,48 @@ namespace rgbCase
         public Color Color
         {
             get { return colorEditorManager.Color; }
-            set { colorEditorManager.Color = value; Settings.Instance.Color = value; }
+            set { Color_Set(value); }
         }
 
-        public byte Brightness { get { return mBrightness; } set { mBrightness = value; Settings.Instance.Brightness = value; } }
+        delegate void ColorArgHandler(Color value);
+        private void Color_Set(Color value)
+        {
+            if (InvokeRequired)
+            {
+                Invoke(new ColorArgHandler(Color_Set), new object[] { value });
+                return;
+            }
+
+            if (colorEditorManager.Color == value)
+                return;
+            colorEditorManager.Color = value;
+            Settings.Instance.Color = value;
+        }
+
+        public byte Brightness
+        {
+            get { return mBrightness; }
+            set { Brightness_Set(value); }
+        }
+
+        delegate void ByteArgHandler(byte value);
+        private void Brightness_Set(byte value)
+        {
+            if(InvokeRequired)
+            {
+                Invoke(new ByteArgHandler(Brightness_Set), new object[] { value });
+                return;
+            }
+
+            if (mBrightness == value)
+                return;
+            mBrightness = value;
+            Settings.Instance.Brightness = value;
+            slideBrightness.Value = (float)value / 2.56f;
+            numBrightness.Value = value;
+            if (mCtrl != null)
+                mCtrl.RequestBrightness(value);
+        }
 
         private void OnColorChanged(object sender, EventArgs e)
         {
@@ -279,19 +327,161 @@ namespace rgbCase
             {
                 if (Brightness == (byte)numBrightness.Value)
                     return;
-                Brightness = (byte)numBrightness.Value;
-                slideBrightness.Value = (float)Brightness / 2.55f;
+                mBrightness = (byte)numBrightness.Value;
+                Settings.Instance.Brightness = mBrightness;
+                slideBrightness.Value = (float)Brightness / 2.56f;
                 mCtrl.RequestBrightness(Brightness);
             }
             else if (sender == slideBrightness)
             {
-                if (Brightness == (byte)(slideBrightness.Value * 2.55f))
+                if (Brightness == (byte)(slideBrightness.Value * 2.56f))
                     return;
-                Brightness = (byte)(slideBrightness.Value * 2.55f);
+                mBrightness = (byte)(slideBrightness.Value * 2.56f);
+                Settings.Instance.Brightness = mBrightness;
                 numBrightness.Value = Brightness;
                 mCtrl.RequestBrightness(Brightness);
             }
         }
         #endregion
+
+        #region Mode
+        private BackgroundWorker mWorker;
+        private EModes mMode;
+        private void comboMode_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            EModes newMode;
+            try { newMode = (EModes)Enum.Parse(typeof(EModes), comboMode.SelectedItem.ToString()); }
+            catch { return; }
+            if (mMode == newMode)
+                return;
+            mMode = newMode;
+            try
+            {
+                if (mWorker != null)
+                {
+                    mWorker.CancelAsync();
+                    mWorker.Dispose();
+                }
+            }
+            catch { }
+            finally { mWorker = null; }
+
+            if(mMode != EModes.Static)
+            {
+                mWorker = new BackgroundWorker();
+                mWorker.WorkerSupportsCancellation = true;
+                mWorker.DoWork += MWorker_DoWork;
+                mWorker.RunWorkerCompleted += MWorker_RunWorkerCompleted;
+                mWorker.RunWorkerAsync(new object[] { this, mMode });
+            }
+            Settings.Instance.Mode = mMode;
+        }
+
+        private void MWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            if (e.Cancelled)
+                comboMode.SelectedIndex = 0;
+        }
+
+        private void MWorker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            try
+            {
+                BackgroundWorker worker = sender as BackgroundWorker;
+                if (worker == null)
+                    return;
+
+                if (!(e.Argument is object[]) || ((object[])e.Argument).Length != 2)
+                    return;
+                MainForm form = ((object[])e.Argument)[0] as MainForm;
+                if (form == null)
+                    return;
+                if (!(((object[])e.Argument)[1] is EModes))
+                    return;
+                EModes mode = (EModes)((object[])e.Argument)[1];
+
+                bool bForward = true;
+
+                #region Init
+                switch (mode)
+                {
+                    case EModes.Breathing:
+                        form.Brightness = (byte)(Settings.Instance.Breathing_Min + 1);
+                        break;
+                    case EModes.Strobing: break;
+                    case EModes.ColorCycle:
+                        form.Color = Color.Black;
+                        Settings.Instance.ColorCycle_State = 0;
+                        break;
+                }
+                #endregion
+
+                while (true)
+                {
+                    if (worker.CancellationPending)
+                        return;
+                    switch (mode)
+                    {
+                        case EModes.Breathing:
+                            if (form.Brightness <= Settings.Instance.Breathing_Min || form.Brightness >= Settings.Instance.Breathing_Max)
+                                bForward = !bForward;
+                            form.Brightness = (byte)((int)form.Brightness + (bForward ? 1 : -1));
+                            Thread.Sleep((int)Settings.Instance.Breathing_Sleep_ms);
+                            break;
+                        case EModes.Strobing:
+                            form.Brightness = (byte)(form.Brightness > Settings.Instance.Strobing_Min + (Settings.Instance.Strobing_Max - Settings.Instance.Strobing_Min) / 2 ? Settings.Instance.Strobing_Min : Settings.Instance.Strobing_Max);
+                            Thread.Sleep((int)Settings.Instance.Strobing_Sleep_ms);
+                            break;
+                        case EModes.ColorCycle:
+                            Color col = form.Color;
+                            switch(Settings.Instance.ColorCycle_State)
+                            {
+                                case 0:
+                                    if (col.R >= 254) Settings.Instance.ColorCycle_State = 1;
+                                    form.Color = Color.FromArgb(col.R + 1, col.G, col.B);
+                                    break;
+                                case 1:
+                                    if (col.B >= 254) Settings.Instance.ColorCycle_State = 2;
+                                    form.Color = Color.FromArgb(col.R, col.G, col.B + 1);
+                                    break;
+                                case 2:
+                                    if (col.G >= 254) Settings.Instance.ColorCycle_State = 3;
+                                    form.Color = Color.FromArgb(col.R, col.G + 1, col.B);
+                                    break;
+                                case 3:
+                                    if (col.R <= 1) Settings.Instance.ColorCycle_State = 4;
+                                    form.Color = Color.FromArgb(col.R - 1, col.G, col.B);
+                                    break;
+                                case 4:
+                                    if (col.B <= 1) Settings.Instance.ColorCycle_State = 5;
+                                    form.Color = Color.FromArgb(col.R, col.G, col.B - 1);
+                                    break;
+                                case 5:
+                                    if (col.G <= 1) Settings.Instance.ColorCycle_State = 0;
+                                    form.Color = Color.FromArgb(col.R, col.G - 1, col.B);
+                                    break;
+                            }
+                            Thread.Sleep((int)Settings.Instance.ColorCycle_Sleep_ms);
+                            break;
+                    }
+                }
+            }
+            catch { e.Cancel = true; }
+        }
+        #endregion
+
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            try
+            {
+                if (mWorker != null)
+                {
+                    mWorker.CancelAsync();
+                    mWorker.Dispose();
+                }
+            }
+            catch { }
+            finally { mWorker = null; }
+        }
     }
 }

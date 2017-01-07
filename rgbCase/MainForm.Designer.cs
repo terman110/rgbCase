@@ -16,6 +16,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.groupConnection = new System.Windows.Forms.GroupBox();
             this.btnDisconnect = new System.Windows.Forms.Button();
             this.btnConnect = new System.Windows.Forms.Button();
@@ -26,8 +27,11 @@
             this.panelTab = new System.Windows.Forms.TabControl();
             this.tabControl = new System.Windows.Forms.TabPage();
             this.panelMaster = new System.Windows.Forms.Panel();
-            this.numBrightness = new System.Windows.Forms.NumericUpDown();
+            this.groupMode = new System.Windows.Forms.GroupBox();
+            this.comboMode = new System.Windows.Forms.ComboBox();
+            this.groupBrightness = new System.Windows.Forms.GroupBox();
             this.slideBrightness = new Cyotek.Windows.Forms.LightnessColorSlider();
+            this.numBrightness = new System.Windows.Forms.NumericUpDown();
             this.groupColor = new System.Windows.Forms.GroupBox();
             this.colorWheel = new Cyotek.Windows.Forms.ColorWheel();
             this.previewPanel = new System.Windows.Forms.Panel();
@@ -35,21 +39,21 @@
             this.screenColorPicker = new Cyotek.Windows.Forms.ScreenColorPicker();
             this.colorEditor = new Cyotek.Windows.Forms.ColorEditor();
             this.tabConsole = new System.Windows.Forms.TabPage();
+            this.checkLog = new System.Windows.Forms.CheckBox();
             this.txtLog = new System.Windows.Forms.TextBox();
             this.btnSend = new System.Windows.Forms.Button();
             this.txtMsg = new System.Windows.Forms.TextBox();
             this.timerHeartBeat = new System.Windows.Forms.Timer(this.components);
             this.colorEditorManager = new Cyotek.Windows.Forms.ColorEditorManager();
-            this.groupBrightness = new System.Windows.Forms.GroupBox();
-            this.groupMode = new System.Windows.Forms.GroupBox();
             this.groupConnection.SuspendLayout();
             this.panelTab.SuspendLayout();
             this.tabControl.SuspendLayout();
             this.panelMaster.SuspendLayout();
+            this.groupMode.SuspendLayout();
+            this.groupBrightness.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.numBrightness)).BeginInit();
             this.groupColor.SuspendLayout();
             this.tabConsole.SuspendLayout();
-            this.groupBrightness.SuspendLayout();
             this.SuspendLayout();
             // 
             // groupConnection
@@ -166,6 +170,52 @@
             this.panelMaster.Size = new System.Drawing.Size(536, 385);
             this.panelMaster.TabIndex = 0;
             // 
+            // groupMode
+            // 
+            this.groupMode.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupMode.Controls.Add(this.comboMode);
+            this.groupMode.Location = new System.Drawing.Point(3, 292);
+            this.groupMode.Name = "groupMode";
+            this.groupMode.Size = new System.Drawing.Size(530, 90);
+            this.groupMode.TabIndex = 17;
+            this.groupMode.TabStop = false;
+            this.groupMode.Text = "Mode";
+            // 
+            // comboMode
+            // 
+            this.comboMode.FormattingEnabled = true;
+            this.comboMode.Location = new System.Drawing.Point(6, 19);
+            this.comboMode.Name = "comboMode";
+            this.comboMode.Size = new System.Drawing.Size(121, 21);
+            this.comboMode.TabIndex = 0;
+            this.comboMode.SelectedIndexChanged += new System.EventHandler(this.comboMode_SelectedIndexChanged);
+            // 
+            // groupBrightness
+            // 
+            this.groupBrightness.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBrightness.Controls.Add(this.slideBrightness);
+            this.groupBrightness.Controls.Add(this.numBrightness);
+            this.groupBrightness.Location = new System.Drawing.Point(3, 3);
+            this.groupBrightness.Name = "groupBrightness";
+            this.groupBrightness.Size = new System.Drawing.Size(530, 47);
+            this.groupBrightness.TabIndex = 16;
+            this.groupBrightness.TabStop = false;
+            this.groupBrightness.Text = "Brightness";
+            // 
+            // slideBrightness
+            // 
+            this.slideBrightness.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.slideBrightness.Color = System.Drawing.Color.White;
+            this.slideBrightness.Location = new System.Drawing.Point(6, 19);
+            this.slideBrightness.Name = "slideBrightness";
+            this.slideBrightness.Size = new System.Drawing.Size(435, 20);
+            this.slideBrightness.TabIndex = 14;
+            this.slideBrightness.Value = 100F;
+            this.slideBrightness.ValueChanged += new System.EventHandler(this.numBrightness_ValueChanged);
+            // 
             // numBrightness
             // 
             this.numBrightness.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -184,18 +234,6 @@
             0,
             0});
             this.numBrightness.ValueChanged += new System.EventHandler(this.numBrightness_ValueChanged);
-            // 
-            // slideBrightness
-            // 
-            this.slideBrightness.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.slideBrightness.Color = System.Drawing.Color.White;
-            this.slideBrightness.Location = new System.Drawing.Point(6, 19);
-            this.slideBrightness.Name = "slideBrightness";
-            this.slideBrightness.Size = new System.Drawing.Size(435, 20);
-            this.slideBrightness.TabIndex = 14;
-            this.slideBrightness.Value = 100F;
-            this.slideBrightness.ValueChanged += new System.EventHandler(this.numBrightness_ValueChanged);
             // 
             // groupColor
             // 
@@ -278,6 +316,7 @@
             // 
             // tabConsole
             // 
+            this.tabConsole.Controls.Add(this.checkLog);
             this.tabConsole.Controls.Add(this.txtLog);
             this.tabConsole.Controls.Add(this.btnSend);
             this.tabConsole.Controls.Add(this.txtMsg);
@@ -289,18 +328,28 @@
             this.tabConsole.Text = "Serial Console";
             this.tabConsole.UseVisualStyleBackColor = true;
             // 
+            // checkLog
+            // 
+            this.checkLog.AutoSize = true;
+            this.checkLog.Location = new System.Drawing.Point(6, 6);
+            this.checkLog.Name = "checkLog";
+            this.checkLog.Size = new System.Drawing.Size(86, 17);
+            this.checkLog.TabIndex = 3;
+            this.checkLog.Text = "Log Enabled";
+            this.checkLog.UseVisualStyleBackColor = true;
+            // 
             // txtLog
             // 
             this.txtLog.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtLog.Font = new System.Drawing.Font("Lucida Console", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtLog.Location = new System.Drawing.Point(6, 6);
+            this.txtLog.Location = new System.Drawing.Point(6, 29);
             this.txtLog.Multiline = true;
             this.txtLog.Name = "txtLog";
             this.txtLog.ReadOnly = true;
             this.txtLog.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtLog.Size = new System.Drawing.Size(530, 351);
+            this.txtLog.Size = new System.Drawing.Size(530, 328);
             this.txtLog.TabIndex = 2;
             // 
             // btnSend
@@ -339,30 +388,6 @@
             this.colorEditorManager.ColorWheel = this.colorWheel;
             this.colorEditorManager.ScreenColorPicker = this.screenColorPicker;
             // 
-            // groupBrightness
-            // 
-            this.groupBrightness.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBrightness.Controls.Add(this.slideBrightness);
-            this.groupBrightness.Controls.Add(this.numBrightness);
-            this.groupBrightness.Location = new System.Drawing.Point(3, 3);
-            this.groupBrightness.Name = "groupBrightness";
-            this.groupBrightness.Size = new System.Drawing.Size(530, 47);
-            this.groupBrightness.TabIndex = 16;
-            this.groupBrightness.TabStop = false;
-            this.groupBrightness.Text = "Brightness";
-            // 
-            // groupMode
-            // 
-            this.groupMode.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupMode.Location = new System.Drawing.Point(3, 292);
-            this.groupMode.Name = "groupMode";
-            this.groupMode.Size = new System.Drawing.Size(530, 90);
-            this.groupMode.TabIndex = 17;
-            this.groupMode.TabStop = false;
-            this.groupMode.Text = "Mode";
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -370,21 +395,24 @@
             this.ClientSize = new System.Drawing.Size(574, 531);
             this.Controls.Add(this.panelTab);
             this.Controls.Add(this.groupConnection);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(590, 570);
             this.Name = "MainForm";
             this.Text = "Arduino RGB Case";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.groupConnection.ResumeLayout(false);
             this.groupConnection.PerformLayout();
             this.panelTab.ResumeLayout(false);
             this.tabControl.ResumeLayout(false);
             this.panelMaster.ResumeLayout(false);
+            this.groupMode.ResumeLayout(false);
+            this.groupBrightness.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.numBrightness)).EndInit();
             this.groupColor.ResumeLayout(false);
             this.groupColor.PerformLayout();
             this.tabConsole.ResumeLayout(false);
             this.tabConsole.PerformLayout();
-            this.groupBrightness.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -417,6 +445,8 @@
         private System.Windows.Forms.NumericUpDown numBrightness;
         private System.Windows.Forms.GroupBox groupBrightness;
         private System.Windows.Forms.GroupBox groupMode;
+        private System.Windows.Forms.ComboBox comboMode;
+        private System.Windows.Forms.CheckBox checkLog;
     }
 }
 
