@@ -68,7 +68,7 @@ namespace rgbCase
         Int32 mLastReceived = Timestamp;
         Int32 mLastSend = Timestamp;
         const Int32 cTimeout_ms = 5000;
-        const Int32 cMinDurationDuringMsg_ms = 10;
+        const Int32 cMinDurationDuringMsg_ms = 1;
         Task mAliveTask;
         CancellationTokenSource mCancelTasks = new CancellationTokenSource();
         Thread mStartingThread;

@@ -1,9 +1,9 @@
 {
   "ComPort": "COM4",
   "BaudRate": 115200,
-  "Color": "165, 60, 195",
-  "Brightness": 215,
-  "Mode": 1,
+  "Color": "200, 255, 0",
+  "Brightness": 255,
+  "Mode": 0,
   "Static": {},
   "Strobing": {
     "Min": 0,
