@@ -11,6 +11,8 @@ namespace rgbCase
         Static,
         Breathing,
         Strobing,
-        ColorCycle
+        ColorCycle,
+        BreathingCycle,
+        ScreenGrab,
     }
 }

@@ -12,3 +12,7 @@ C:\Users\jan\Documents\GitHub\rgbCase\rgbCase\rgbCase\obj\Release\rgbCase.Proper
 C:\Users\jan\Documents\GitHub\rgbCase\rgbCase\rgbCase\obj\Release\rgbCase.csproj.GenerateResource.Cache
 C:\Users\jan\Documents\GitHub\rgbCase\rgbCase\rgbCase\obj\Release\rgbCase.exe
 C:\Users\jan\Documents\GitHub\rgbCase\rgbCase\rgbCase\obj\Release\rgbCase.pdb
+C:\Users\jan\Documents\GitHub\rgbCase\rgbCase\rgbCase\obj\Release\rgbCase.Effects.ColorCycle.resources
+C:\Users\jan\Documents\GitHub\rgbCase\rgbCase\rgbCase\obj\Release\rgbCase.Effects.Breathing.resources
+C:\Users\jan\Documents\GitHub\rgbCase\rgbCase\rgbCase\obj\Release\rgbCase.Effects.Strobing.resources
+C:\Users\jan\Documents\GitHub\rgbCase\rgbCase\rgbCase\obj\Release\rgbCase.Effects.BreathingCycle.resources

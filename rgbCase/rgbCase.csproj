@@ -59,6 +59,48 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ArduinoController.cs" />
+    <Compile Include="DoubleBufferPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Effects\BreathingCycle.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Effects\BreathingCycle.Designer.cs">
+      <DependentUpon>BreathingCycle.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Effects\ScreenGrab.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Effects\ScreenGrab.Designer.cs">
+      <DependentUpon>ScreenGrab.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Effects\ColorCycle.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Effects\ColorCycle.Designer.cs">
+      <DependentUpon>ColorCycle.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Effects\EffectBase.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Effects\Breathing.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Effects\Breathing.Designer.cs">
+      <DependentUpon>Breathing.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Effects\Strobing.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Effects\Strobing.Designer.cs">
+      <DependentUpon>Strobing.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Effects\Static.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Effects\Static.Designer.cs">
+      <DependentUpon>Static.cs</DependentUpon>
+    </Compile>
     <Compile Include="EModes.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
@@ -69,6 +111,21 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings.cs" />
+    <EmbeddedResource Include="Effects\BreathingCycle.resx">
+      <DependentUpon>BreathingCycle.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Effects\ScreenGrab.resx">
+      <DependentUpon>ScreenGrab.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Effects\ColorCycle.resx">
+      <DependentUpon>ColorCycle.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Effects\Breathing.resx">
+      <DependentUpon>Breathing.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Effects\Strobing.resx">
+      <DependentUpon>Strobing.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>

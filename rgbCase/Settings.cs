@@ -18,17 +18,26 @@ namespace rgbCase
         public byte Brightness { get; set; } = 255;
         public EModes Mode { get; set; } = EModes.Static;
 
-        public byte Breathing_Min { get; set; } = 32;
-        public byte Breathing_Max { get; set; } = 255;
-        public uint Breathing_Sleep_ms { get; set; } = 9;
+        public Effects.Static.Parameter Static { get; set; } = new Effects.Static.Parameter();
+        public Effects.Strobing.Parameter Strobing { get; set; } = new Effects.Strobing.Parameter();
+        public Effects.Breathing.Parameter Breathing { get; set; } = new Effects.Breathing.Parameter();
+        public Effects.ColorCycle.Parameter ColorCycle { get; set; } = new Effects.ColorCycle.Parameter();
+        public Effects.BreathingCycle.Parameter BreathingCycle { get; set; } = new Effects.BreathingCycle.Parameter();
+        public Effects.ScreenGrab.Parameter ScreenGrab { get; set; } = new Effects.ScreenGrab.Parameter();
 
-        public byte Strobing_Min { get; set; } = 0;
-        public byte Strobing_Max { get; set; } = 255;
-        public uint Strobing_Sleep_ms { get; set; } = 250;
-
-        public uint ColorCycle_Sleep_ms { get; set; } = 9;
-        [JsonIgnore]
-        public uint ColorCycle_State { get; set; } = 0;
+        public Effects.EffectBase GetEffect(EModes nMode)
+        {
+            switch(nMode)
+            {
+                case EModes.Static: return new Effects.Static(Static);
+                case EModes.Strobing: return new Effects.Strobing(Strobing);
+                case EModes.Breathing: return new Effects.Breathing(Breathing);
+                case EModes.ColorCycle: return new Effects.ColorCycle(ColorCycle);
+                case EModes.BreathingCycle: return new Effects.BreathingCycle(BreathingCycle);
+                case EModes.ScreenGrab: return new Effects.ScreenGrab(ScreenGrab);
+                default: return null;
+            }
+        }
 
         #region Instance
         private Settings() { }

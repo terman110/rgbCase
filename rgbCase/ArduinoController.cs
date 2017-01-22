@@ -238,35 +238,38 @@ namespace rgbCase
         {
             if (mPort == null)
                 return;
-
-            while (mPort.BytesToRead > 0)
+            try
             {
-                switch (e.EventType)
+                while (mPort.BytesToRead > 0)
                 {
-                    case SerialData.Chars:
-                        MessageType nType;
-                        byte bD0, bD1, bD2;
-                        string sMsg = GetLatestMessage(out nType, out bD0, out bD1, out bD2);
-                        if (string.IsNullOrWhiteSpace(sMsg))
-                            return;
+                    switch (e.EventType)
+                    {
+                        case SerialData.Chars:
+                            MessageType nType;
+                            byte bD0, bD1, bD2;
+                            string sMsg = GetLatestMessage(out nType, out bD0, out bD1, out bD2);
+                            if (string.IsNullOrWhiteSpace(sMsg))
+                                return;
 
-                        mLastReceived = Timestamp;
+                            mLastReceived = Timestamp;
 
-                        switch (nType)
-                        {
-                            case MessageType.Error:
-                                if (StateChangeReceived != null)
-                                    StateChangeReceived(StateType.UnknownError, "Last command failed [" + sMsg + "]");
-                                break;
-                        }
+                            switch (nType)
+                            {
+                                case MessageType.Error:
+                                    if (StateChangeReceived != null)
+                                        StateChangeReceived(StateType.UnknownError, "Last command failed [" + sMsg + "]");
+                                    break;
+                            }
 
-                        if (MessageReceived != null)
-                            MessageReceived(nType, sMsg);
-                        break;
-                    case SerialData.Eof:
-                        break;
+                            if (MessageReceived != null)
+                                MessageReceived(nType, sMsg);
+                            break;
+                        case SerialData.Eof:
+                            break;
+                    }
                 }
             }
+            catch { }
         }
 
         private string GetLatestMessage(out MessageType nType, out byte bD0, out byte bD1, out byte bD2)

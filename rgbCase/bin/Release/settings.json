@@ -1,14 +1,26 @@
 {
-  "ComPort": "COM3",
+  "ComPort": "COM4",
   "BaudRate": 115200,
-  "Color": "189, 0, 0",
-  "Brightness": 245,
-  "Mode": 3,
-  "Breathing_Min": 32,
-  "Breathing_Max": 255,
-  "Breathing_Sleep_ms": 9,
-  "Strobing_Min": 0,
-  "Strobing_Max": 255,
-  "Strobing_Sleep_ms": 250,
-  "ColorCycle_Sleep_ms": 9
+  "Color": "Red",
+  "Brightness": 19,
+  "Mode": 1,
+  "Static": {},
+  "Strobing": {
+    "Min": 0,
+    "Max": 255,
+    "Sleep_ms": 250
+  },
+  "Breathing": {
+    "Min": 0,
+    "Max": 255,
+    "Sleep_ms": 10
+  },
+  "ColorCycle": {
+    "Sleep_ms": 10
+  },
+  "BreathingCycle": {
+    "Sleep_ms": 9,
+    "Min": 0,
+    "Max": 255
+  }
 }

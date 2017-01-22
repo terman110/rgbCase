@@ -21,6 +21,7 @@ namespace rgbCase
         public MainForm()
         {
             InitializeComponent();
+            barNotifyIcon.Text = Application.ProductName;
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -45,7 +46,19 @@ namespace rgbCase
             comboMode.Items.AddRange(Enum.GetNames(typeof(EModes)));
             if (comboMode.Items.Contains(Settings.Instance.Mode.ToString()))
                 comboMode.SelectedIndex = comboMode.Items.IndexOf(Settings.Instance.Mode.ToString());
+
+#if !DEBUG
+            if(HideOnLaunch)
+            {
+                Task.Factory.StartNew(() => {
+                    Thread.Sleep(500);
+                    Invoke(new MethodInvoker(Hide));
+                });
+            }
+#endif
         }
+
+        public bool HideOnLaunch { get; set; } = false;
 
         private void btnConnect_Click(object sender, EventArgs e)
         {
@@ -90,7 +103,12 @@ namespace rgbCase
         }
             catch
             {
-
+                mCtrl = null;
+                lblPort.Enabled = true;
+                cmbPort.Enabled = true;
+                lblBaud.Enabled = true;
+                cmbBaud.Enabled = true;
+                btnConnect.Enabled = true;
             }
             finally
             {
@@ -236,7 +254,7 @@ namespace rgbCase
             base.Dispose(disposing);
         }
 
-        #region Color
+#region Color
         public Color Color
         {
             get { return colorEditorManager.Color; }
@@ -281,6 +299,7 @@ namespace rgbCase
             numBrightness.Value = value;
             if (mCtrl != null)
                 mCtrl.RequestBrightness(value);
+            previewPanel.Invalidate();
         }
 
         private void OnColorChanged(object sender, EventArgs e)
@@ -288,12 +307,25 @@ namespace rgbCase
             if (mCtrl == null || Settings.Instance.Color == Color)
                 return;
             Settings.Instance.Color = Color;
+
+            //double gammaValue = 2d;
+            //mCtrl.RequestColor(Color.FromArgb(
+            //    (byte)(Math.Pow((double)this.Color.R / 255d, 1d / gammaValue) * 255d),
+            //    (byte)(Math.Pow((double)this.Color.G / 255d, 1d / gammaValue) * 255d),
+            //    (byte)(Math.Pow((double)this.Color.B / 255d, 1d / gammaValue) * 255d)
+            //    ));
+
+            // Gamma correction moved to micro controller
             mCtrl.RequestColor(Color);
+
             previewPanel.Invalidate();
         }
 
         private void previewPanel_Paint(object sender, PaintEventArgs e)
         {
+            if (!Visible)
+                return;
+
             Rectangle region;
 
             region = previewPanel.ClientRectangle;
@@ -311,12 +343,13 @@ namespace rgbCase
                 e.Graphics.FillRectangle(_textureBrush, region);
             }
 
-            using (Brush brush = new SolidBrush(this.Color))
-            {
-                e.Graphics.FillRectangle(brush, region);
-            }
+            using (Brush brush = new SolidBrush(Color.FromArgb((int)((float)this.Color.R / 255f * Brightness), (int)((float)this.Color.G / 255f * Brightness), (int)((float)this.Color.B / 255f * Brightness))))
+                e.Graphics.FillRectangle(brush, region.X, region.Y, region.Width / 2, region.Height);
 
-            e.Graphics.DrawRectangle(SystemPens.ControlText, region.Left, region.Top, region.Width - 1, region.Height - 1);
+            using (Brush brush = new SolidBrush(this.Color))
+                e.Graphics.FillRectangle(brush, region.X + region.Width / 2, region.Y, region.Width / 2, region.Height);
+
+            //e.Graphics.DrawRectangle(SystemPens.ControlText, region.Left, region.Top, region.Width - 1, region.Height - 1);
         }
 
         private void numBrightness_ValueChanged(object sender, EventArgs e)
@@ -342,9 +375,9 @@ namespace rgbCase
                 mCtrl.RequestBrightness(Brightness);
             }
         }
-        #endregion
+#endregion
 
-        #region Mode
+#region Mode
         private BackgroundWorker mWorker;
         private EModes mMode;
         private void comboMode_SelectedIndexChanged(object sender, EventArgs e)
@@ -366,15 +399,41 @@ namespace rgbCase
             catch { }
             finally { mWorker = null; }
 
-            if(mMode != EModes.Static)
+            panelParam.Controls.Clear();
+
+            Effects.EffectBase effect = Settings.Instance.GetEffect(mMode);
+            if (effect == null)
+                return;
+
+            effect.Dock = DockStyle.Fill;
+            panelParam.Controls.Add(effect);
+
+            if (effect.IsAnimation)
             {
                 mWorker = new BackgroundWorker();
                 mWorker.WorkerSupportsCancellation = true;
                 mWorker.DoWork += MWorker_DoWork;
                 mWorker.RunWorkerCompleted += MWorker_RunWorkerCompleted;
-                mWorker.RunWorkerAsync(new object[] { this, mMode });
+                mWorker.RunWorkerAsync(new object[] { this, effect });
+            }
+            else
+            {
+                effect.Init(this);
+                effect.Work(this);
             }
             Settings.Instance.Mode = mMode;
+        }
+
+        private delegate void SetVisibilityHandler(bool bBright, bool bColor);
+        public void SetVisibility(bool bBright, bool bColor)
+        {
+            if(InvokeRequired)
+            {
+                Invoke(new SetVisibilityHandler(SetVisibility), new object[] { bBright, bColor });
+                return;
+            }
+            groupBrightness.Visible = bBright;
+            groupColor.Visible = bColor;
         }
 
         private void MWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -396,82 +455,33 @@ namespace rgbCase
                 MainForm form = ((object[])e.Argument)[0] as MainForm;
                 if (form == null)
                     return;
-                if (!(((object[])e.Argument)[1] is EModes))
+
+                Effects.EffectBase effect = ((object[])e.Argument)[1] as Effects.EffectBase;
+                if (effect == null)
                     return;
-                EModes mode = (EModes)((object[])e.Argument)[1];
-
-                bool bForward = true;
-
-                #region Init
-                switch (mode)
-                {
-                    case EModes.Breathing:
-                        form.Brightness = (byte)(Settings.Instance.Breathing_Min + 1);
-                        break;
-                    case EModes.Strobing: break;
-                    case EModes.ColorCycle:
-                        form.Color = Color.Black;
-                        Settings.Instance.ColorCycle_State = 0;
-                        break;
-                }
-                #endregion
+                
+                effect.Init(this);
 
                 while (true)
                 {
                     if (worker.CancellationPending)
                         return;
-                    switch (mode)
-                    {
-                        case EModes.Breathing:
-                            if (form.Brightness <= Settings.Instance.Breathing_Min || form.Brightness >= Settings.Instance.Breathing_Max)
-                                bForward = !bForward;
-                            form.Brightness = (byte)((int)form.Brightness + (bForward ? 1 : -1));
-                            Thread.Sleep((int)Settings.Instance.Breathing_Sleep_ms);
-                            break;
-                        case EModes.Strobing:
-                            form.Brightness = (byte)(form.Brightness > Settings.Instance.Strobing_Min + (Settings.Instance.Strobing_Max - Settings.Instance.Strobing_Min) / 2 ? Settings.Instance.Strobing_Min : Settings.Instance.Strobing_Max);
-                            Thread.Sleep((int)Settings.Instance.Strobing_Sleep_ms);
-                            break;
-                        case EModes.ColorCycle:
-                            Color col = form.Color;
-                            switch(Settings.Instance.ColorCycle_State)
-                            {
-                                case 0:
-                                    if (col.R >= 254) Settings.Instance.ColorCycle_State = 1;
-                                    form.Color = Color.FromArgb(col.R + 1, col.G, col.B);
-                                    break;
-                                case 1:
-                                    if (col.B >= 254) Settings.Instance.ColorCycle_State = 2;
-                                    form.Color = Color.FromArgb(col.R, col.G, col.B + 1);
-                                    break;
-                                case 2:
-                                    if (col.G >= 254) Settings.Instance.ColorCycle_State = 3;
-                                    form.Color = Color.FromArgb(col.R, col.G + 1, col.B);
-                                    break;
-                                case 3:
-                                    if (col.R <= 1) Settings.Instance.ColorCycle_State = 4;
-                                    form.Color = Color.FromArgb(col.R - 1, col.G, col.B);
-                                    break;
-                                case 4:
-                                    if (col.B <= 1) Settings.Instance.ColorCycle_State = 5;
-                                    form.Color = Color.FromArgb(col.R, col.G, col.B - 1);
-                                    break;
-                                case 5:
-                                    if (col.G <= 1) Settings.Instance.ColorCycle_State = 0;
-                                    form.Color = Color.FromArgb(col.R, col.G - 1, col.B);
-                                    break;
-                            }
-                            Thread.Sleep((int)Settings.Instance.ColorCycle_Sleep_ms);
-                            break;
-                    }
+                    effect.Work(this);
                 }
             }
             catch { e.Cancel = true; }
         }
-        #endregion
+#endregion
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
+            if(sender == this && !m_UserClosing && e.CloseReason == CloseReason.UserClosing)
+            {
+                e.Cancel = true;
+                Hide();
+                return;
+            }
+
             try
             {
                 if (mWorker != null)
@@ -482,6 +492,23 @@ namespace rgbCase
             }
             catch { }
             finally { mWorker = null; }
+        }
+
+        private void showToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Show();
+        }
+
+        private bool m_UserClosing = false;
+        private void closeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            m_UserClosing = true;
+            this.Close();
+        }
+
+        private void barNotifyIcon_MouseClick(object sender, MouseEventArgs e)
+        {
+            this.Show();
         }
     }
 }
