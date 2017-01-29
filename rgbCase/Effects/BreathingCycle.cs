@@ -47,10 +47,10 @@ namespace rgbCase.Effects
         public override void Init(MainForm form)
         {
             form.Color = Color.FromKnownColor(names[randomGen.Next(names.Length)]);
-            if (form.Brightness < 10)
-                form.Brightness = 255;
+            if (form.Brightness < Param.Min)
+                form.Brightness = Param.Min;
             nState = 0;
-            form.SetVisibility(true, false);
+            form.SetVisibility(false, false);
         }
         
         private uint nState { get; set; } = 0;
@@ -60,7 +60,7 @@ namespace rgbCase.Effects
         KnownColor[] names;
         public override void Work(MainForm form)
         {
-            if (form.Brightness <= Param.Min || form.Brightness >= Param.Max)
+            if (form.Brightness < 0 || form.Brightness > 255 || form.Brightness <= Param.Min || form.Brightness >= Param.Max)
                 bForward = !bForward;
 
             if (form.Brightness <= Param.Min)

@@ -1,14 +1,14 @@
 {
   "ComPort": "COM4",
   "BaudRate": 115200,
-  "Color": "200, 255, 0",
-  "Brightness": 255,
-  "Mode": 0,
+  "Color": "LemonChiffon",
+  "Brightness": 252,
+  "Mode": 4,
   "Static": {},
   "Strobing": {
     "Min": 0,
     "Max": 255,
-    "Sleep_ms": 100
+    "Sleep_ms": 250
   },
   "Breathing": {
     "Min": 0,

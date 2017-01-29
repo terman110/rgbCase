@@ -96,7 +96,7 @@ namespace rgbCase
             Connect(portName, baud);
         }
 
-        static public Int32 Timestamp { get { return (Int32)(DateTime.UtcNow.Subtract(new DateTime(2017, 1, 1))).TotalMilliseconds; ; } }
+        static public Int32 Timestamp { get { return (Int32)(DateTime.UtcNow.Subtract(DateTime.Today)).TotalMilliseconds; ; } }
 
         public bool Connected { get { return mPort != null; } }
 

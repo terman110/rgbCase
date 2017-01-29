@@ -1,9 +1,9 @@
 {
   "ComPort": "COM4",
   "BaudRate": 115200,
-  "Color": "Red",
-  "Brightness": 19,
-  "Mode": 1,
+  "Color": "Maroon",
+  "Brightness": 105,
+  "Mode": 4,
   "Static": {},
   "Strobing": {
     "Min": 0,
@@ -13,14 +13,18 @@
   "Breathing": {
     "Min": 0,
     "Max": 255,
-    "Sleep_ms": 10
+    "Sleep_ms": 6
   },
   "ColorCycle": {
-    "Sleep_ms": 10
+    "Sleep_ms": 9
   },
   "BreathingCycle": {
     "Sleep_ms": 9,
     "Min": 0,
     "Max": 255
+  },
+  "ScreenGrab": {
+    "Sleep_ms": 250,
+    "Screen_Idx": 0
   }
 }

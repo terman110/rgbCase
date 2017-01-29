@@ -16,3 +16,4 @@ C:\Users\jan\Documents\GitHub\rgbCase\rgbCase\rgbCase\obj\Release\rgbCase.Effect
 C:\Users\jan\Documents\GitHub\rgbCase\rgbCase\rgbCase\obj\Release\rgbCase.Effects.Breathing.resources
 C:\Users\jan\Documents\GitHub\rgbCase\rgbCase\rgbCase\obj\Release\rgbCase.Effects.Strobing.resources
 C:\Users\jan\Documents\GitHub\rgbCase\rgbCase\rgbCase\obj\Release\rgbCase.Effects.BreathingCycle.resources
+C:\Users\jan\Documents\GitHub\rgbCase\rgbCase\rgbCase\obj\Release\rgbCase.Effects.ScreenGrab.resources
