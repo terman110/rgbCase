@@ -25,6 +25,7 @@
             this.lblBaud = new System.Windows.Forms.Label();
             this.lblPort = new System.Windows.Forms.Label();
             this.btnConnect = new System.Windows.Forms.Button();
+            this.btnClose = new System.Windows.Forms.Button();
             this.panelTab = new System.Windows.Forms.TabControl();
             this.tabControl = new System.Windows.Forms.TabPage();
             this.panelMaster = new System.Windows.Forms.Panel();
@@ -41,6 +42,13 @@
             this.screenColorPicker = new Cyotek.Windows.Forms.ScreenColorPicker();
             this.colorEditor = new Cyotek.Windows.Forms.ColorEditor();
             this.tabConsole = new System.Windows.Forms.TabPage();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
+            this.btnSendMode = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
+            this.txtModeP2 = new System.Windows.Forms.TextBox();
+            this.txtModeP1 = new System.Windows.Forms.TextBox();
+            this.txtMode = new System.Windows.Forms.TextBox();
             this.checkLog = new System.Windows.Forms.CheckBox();
             this.txtLog = new System.Windows.Forms.TextBox();
             this.btnSend = new System.Windows.Forms.Button();
@@ -52,13 +60,6 @@
             this.showToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.closeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.previewPanel = new rgbCase.DoubleBufferPanel();
-            this.txtMode = new System.Windows.Forms.TextBox();
-            this.txtModeP1 = new System.Windows.Forms.TextBox();
-            this.txtModeP2 = new System.Windows.Forms.TextBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.btnSendMode = new System.Windows.Forms.Button();
-            this.label2 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
             this.groupConnection.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.panelTab.SuspendLayout();
@@ -87,19 +88,21 @@
             // 
             // tableLayoutPanel2
             // 
-            this.tableLayoutPanel2.ColumnCount = 6;
+            this.tableLayoutPanel2.ColumnCount = 7;
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
             this.tableLayoutPanel2.Controls.Add(this.cmbPort, 3, 0);
             this.tableLayoutPanel2.Controls.Add(this.cmbBaud, 5, 0);
             this.tableLayoutPanel2.Controls.Add(this.btnDisconnect, 1, 0);
             this.tableLayoutPanel2.Controls.Add(this.lblBaud, 4, 0);
             this.tableLayoutPanel2.Controls.Add(this.lblPort, 2, 0);
             this.tableLayoutPanel2.Controls.Add(this.btnConnect, 0, 0);
+            this.tableLayoutPanel2.Controls.Add(this.btnClose, 6, 0);
             this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 16);
             this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(0);
@@ -115,16 +118,16 @@
             this.cmbPort.FormattingEnabled = true;
             this.cmbPort.Location = new System.Drawing.Point(197, 3);
             this.cmbPort.Name = "cmbPort";
-            this.cmbPort.Size = new System.Drawing.Size(150, 21);
+            this.cmbPort.Size = new System.Drawing.Size(109, 21);
             this.cmbPort.TabIndex = 0;
             // 
             // cmbBaud
             // 
             this.cmbBaud.Dock = System.Windows.Forms.DockStyle.Fill;
             this.cmbBaud.FormattingEnabled = true;
-            this.cmbBaud.Location = new System.Drawing.Point(391, 3);
+            this.cmbBaud.Location = new System.Drawing.Point(350, 3);
             this.cmbBaud.Name = "cmbBaud";
-            this.cmbBaud.Size = new System.Drawing.Size(150, 21);
+            this.cmbBaud.Size = new System.Drawing.Size(109, 21);
             this.cmbBaud.TabIndex = 1;
             // 
             // btnDisconnect
@@ -143,7 +146,7 @@
             // 
             this.lblBaud.AutoSize = true;
             this.lblBaud.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblBaud.Location = new System.Drawing.Point(353, 0);
+            this.lblBaud.Location = new System.Drawing.Point(312, 0);
             this.lblBaud.Name = "lblBaud";
             this.lblBaud.Size = new System.Drawing.Size(32, 29);
             this.lblBaud.TabIndex = 3;
@@ -171,6 +174,17 @@
             this.btnConnect.Text = "Connect";
             this.btnConnect.UseVisualStyleBackColor = true;
             this.btnConnect.Click += new System.EventHandler(this.btnConnect_Click);
+            // 
+            // btnClose
+            // 
+            this.btnClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnClose.Location = new System.Drawing.Point(466, 3);
+            this.btnClose.Name = "btnClose";
+            this.btnClose.Size = new System.Drawing.Size(75, 23);
+            this.btnClose.TabIndex = 6;
+            this.btnClose.Text = "Close";
+            this.btnClose.UseVisualStyleBackColor = true;
+            this.btnClose.Click += new System.EventHandler(this.btnClose_Click);
             // 
             // panelTab
             // 
@@ -390,6 +404,78 @@
             this.tabConsole.Text = "Serial Console";
             this.tabConsole.UseVisualStyleBackColor = true;
             // 
+            // label3
+            // 
+            this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(252, 390);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(46, 13);
+            this.label3.TabIndex = 10;
+            this.label3.Text = "Param 2";
+            // 
+            // label2
+            // 
+            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(123, 390);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(46, 13);
+            this.label2.TabIndex = 9;
+            this.label2.Text = "Param 1";
+            // 
+            // btnSendMode
+            // 
+            this.btnSendMode.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnSendMode.Enabled = false;
+            this.btnSendMode.Location = new System.Drawing.Point(461, 387);
+            this.btnSendMode.Name = "btnSendMode";
+            this.btnSendMode.Size = new System.Drawing.Size(75, 23);
+            this.btnSendMode.TabIndex = 8;
+            this.btnSendMode.Text = "Send";
+            this.btnSendMode.UseVisualStyleBackColor = true;
+            this.btnSendMode.Click += new System.EventHandler(this.btnSendMode_Click);
+            // 
+            // label1
+            // 
+            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(6, 390);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(34, 13);
+            this.label1.TabIndex = 7;
+            this.label1.Text = "Mode";
+            // 
+            // txtModeP2
+            // 
+            this.txtModeP2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.txtModeP2.Enabled = false;
+            this.txtModeP2.Font = new System.Drawing.Font("Lucida Console", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtModeP2.Location = new System.Drawing.Point(304, 389);
+            this.txtModeP2.Name = "txtModeP2";
+            this.txtModeP2.Size = new System.Drawing.Size(71, 18);
+            this.txtModeP2.TabIndex = 6;
+            // 
+            // txtModeP1
+            // 
+            this.txtModeP1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.txtModeP1.Enabled = false;
+            this.txtModeP1.Font = new System.Drawing.Font("Lucida Console", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtModeP1.Location = new System.Drawing.Point(175, 389);
+            this.txtModeP1.Name = "txtModeP1";
+            this.txtModeP1.Size = new System.Drawing.Size(71, 18);
+            this.txtModeP1.TabIndex = 5;
+            // 
+            // txtMode
+            // 
+            this.txtMode.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.txtMode.Enabled = false;
+            this.txtMode.Font = new System.Drawing.Font("Lucida Console", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtMode.Location = new System.Drawing.Point(46, 389);
+            this.txtMode.Name = "txtMode";
+            this.txtMode.Size = new System.Drawing.Size(71, 18);
+            this.txtMode.TabIndex = 4;
+            // 
             // checkLog
             // 
             this.checkLog.AutoSize = true;
@@ -493,78 +579,6 @@
             this.previewPanel.TabIndex = 10;
             this.previewPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.previewPanel_Paint);
             // 
-            // txtMode
-            // 
-            this.txtMode.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.txtMode.Enabled = false;
-            this.txtMode.Font = new System.Drawing.Font("Lucida Console", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtMode.Location = new System.Drawing.Point(46, 389);
-            this.txtMode.Name = "txtMode";
-            this.txtMode.Size = new System.Drawing.Size(71, 18);
-            this.txtMode.TabIndex = 4;
-            // 
-            // txtModeP1
-            // 
-            this.txtModeP1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.txtModeP1.Enabled = false;
-            this.txtModeP1.Font = new System.Drawing.Font("Lucida Console", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtModeP1.Location = new System.Drawing.Point(175, 389);
-            this.txtModeP1.Name = "txtModeP1";
-            this.txtModeP1.Size = new System.Drawing.Size(71, 18);
-            this.txtModeP1.TabIndex = 5;
-            // 
-            // txtModeP2
-            // 
-            this.txtModeP2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.txtModeP2.Enabled = false;
-            this.txtModeP2.Font = new System.Drawing.Font("Lucida Console", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtModeP2.Location = new System.Drawing.Point(304, 389);
-            this.txtModeP2.Name = "txtModeP2";
-            this.txtModeP2.Size = new System.Drawing.Size(71, 18);
-            this.txtModeP2.TabIndex = 6;
-            // 
-            // label1
-            // 
-            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(6, 390);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(34, 13);
-            this.label1.TabIndex = 7;
-            this.label1.Text = "Mode";
-            // 
-            // btnSendMode
-            // 
-            this.btnSendMode.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnSendMode.Enabled = false;
-            this.btnSendMode.Location = new System.Drawing.Point(461, 387);
-            this.btnSendMode.Name = "btnSendMode";
-            this.btnSendMode.Size = new System.Drawing.Size(75, 23);
-            this.btnSendMode.TabIndex = 8;
-            this.btnSendMode.Text = "Send";
-            this.btnSendMode.UseVisualStyleBackColor = true;
-            this.btnSendMode.Click += new System.EventHandler(this.btnSendMode_Click);
-            // 
-            // label2
-            // 
-            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(123, 390);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(46, 13);
-            this.label2.TabIndex = 9;
-            this.label2.Text = "Param 1";
-            // 
-            // label3
-            // 
-            this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(252, 390);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(46, 13);
-            this.label3.TabIndex = 10;
-            this.label3.Text = "Param 2";
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -642,6 +656,7 @@
         private System.Windows.Forms.TextBox txtModeP2;
         private System.Windows.Forms.TextBox txtModeP1;
         private System.Windows.Forms.TextBox txtMode;
+        private System.Windows.Forms.Button btnClose;
     }
 }
 

@@ -38,7 +38,7 @@ namespace rgbCase.Effects
 
         private MainForm Form { get; set; }
 
-        public override bool IsAnimation { get { return Param.ControllerBased; } }
+        public override bool IsAnimation { get { return !Param.ControllerBased; } }
 
         public override void Init(MainForm form)
         {

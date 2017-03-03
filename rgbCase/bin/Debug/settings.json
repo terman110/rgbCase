@@ -1,7 +1,7 @@
 {
   "ComPort": "COM4",
   "BaudRate": 115200,
-  "Color": "255, 10, 0",
+  "Color": "89, 0, 255",
   "Brightness": 1,
   "Mode": 1,
   "Static": {},

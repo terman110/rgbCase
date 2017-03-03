@@ -446,6 +446,7 @@ namespace rgbCase
             effect.Dock = DockStyle.Fill;
             panelParam.Controls.Add(effect);
 
+            previewPanel.Visible = effect.IsAnimation;
             if (effect.IsAnimation)
             {
                 mWorker = new BackgroundWorker();
@@ -545,6 +546,12 @@ namespace rgbCase
 
         private bool m_UserClosing = false;
         private void closeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            m_UserClosing = true;
+            this.Close();
+        }
+
+        private void btnClose_Click(object sender, EventArgs e)
         {
             m_UserClosing = true;
             this.Close();
