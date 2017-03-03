@@ -1,17 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using Newtonsoft.Json;
 using System.Runtime.InteropServices;
+using System.Threading;
+using System.Windows.Forms;
 
 namespace rgbCase.Effects
 {
@@ -25,7 +17,7 @@ namespace rgbCase.Effects
         public class Parameter
         {
             public Parameter() { }
-            
+
             public uint Sleep_ms { get; set; } = 250;
             public int Screen_Idx { get; set; } = 0;
         }
@@ -36,7 +28,7 @@ namespace rgbCase.Effects
             Param = objParam;
             mDelay.Value = Param.Sleep_ms;
             Screen[] aScreens = Screen.AllScreens;
-            for(int i = 0; i < aScreens.Length; ++i)
+            for (int i = 0; i < aScreens.Length; ++i)
                 comboBox1.Items.Add((i + 1).ToString() + ": " + aScreens[i].DeviceName);
             comboBox1.Items.Add("All");
             if (Param.Screen_Idx < 0)
@@ -86,7 +78,7 @@ namespace rgbCase.Effects
 
         private static Color AverageBitmap(Bitmap bm)
         {
-            BitmapData srcData = bm.LockBits( new Rectangle(0, 0, bm.Width, bm.Height), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
+            BitmapData srcData = bm.LockBits(new Rectangle(0, 0, bm.Width, bm.Height), ImageLockMode.ReadOnly, PixelFormat.Format32bppArgb);
 
             int stride = srcData.Stride;
 

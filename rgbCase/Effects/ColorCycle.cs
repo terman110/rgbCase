@@ -1,14 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using Newtonsoft.Json;
 
 namespace rgbCase.Effects
 {
@@ -22,8 +14,9 @@ namespace rgbCase.Effects
         public class Parameter
         {
             public Parameter() { }
-            
+
             public uint Sleep_ms { get; set; } = 9;
+            public bool ControllerBased { get; set; } = true;
         }
 
         public ColorCycle(Parameter objParam) : base()
@@ -31,24 +24,37 @@ namespace rgbCase.Effects
             InitializeComponent();
             Param = objParam;
             mDelay.Value = Param.Sleep_ms;
+            mController.Checked = Param.ControllerBased;
         }
 
         public Parameter Param { get; set; }
 
-        public override bool IsAnimation { get { return true; } }
+        private MainForm Form { get; set; }
+
+        public override bool IsAnimation { get { return Param.ControllerBased; } }
 
         public override void Init(MainForm form)
         {
+            Thread.Sleep(10);
+            Form = form;
             form.Color = Color.Black;
             if (form.Brightness < 10)
                 form.Brightness = 255;
             nState = 0;
             form.SetVisibility(true, false);
+            Thread.Sleep(10);
+            if (Form != null && Param.ControllerBased)
+                Form.SetControllerMode(2, (byte)Math.Min(Param.Sleep_ms, 255), 0);
         }
-        
+
         private uint nState { get; set; } = 0;
         public override void Work(MainForm form)
         {
+            if (Param.ControllerBased)
+            {
+                Thread.Sleep(500);
+                return;
+            }
             Color col = form.Color;
             switch (nState)
             {
@@ -83,6 +89,13 @@ namespace rgbCase.Effects
         private void mDelay_ValueChanged(object sender, EventArgs e)
         {
             Param.Sleep_ms = (uint)mDelay.Value;
+            if (Form != null && Param.ControllerBased)
+                Form.SetControllerMode(2, (byte)Math.Min(Param.Sleep_ms, 255), 0);
+        }
+
+        private void mController_CheckedChanged(object sender, EventArgs e)
+        {
+            Param.ControllerBased = mController.Checked;
         }
     }
 }

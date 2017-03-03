@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
-using System.Windows.Forms;
-using System.IO;
+﻿using Newtonsoft.Json;
+using System;
 using System.Drawing;
+using System.IO;
+using System.Windows.Forms;
 
 namespace rgbCase
 {
@@ -27,7 +23,7 @@ namespace rgbCase
 
         public Effects.EffectBase GetEffect(EModes nMode)
         {
-            switch(nMode)
+            switch (nMode)
             {
                 case EModes.Static: return new Effects.Static(Static);
                 case EModes.Strobing: return new Effects.Strobing(Strobing);
@@ -53,7 +49,7 @@ namespace rgbCase
             }
             private set { mInstance = value; }
         }
-        
+
         public static Settings Load()
         {
             try

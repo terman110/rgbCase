@@ -1,9 +1,9 @@
 {
   "ComPort": "COM4",
   "BaudRate": 115200,
-  "Color": "LemonChiffon",
-  "Brightness": 252,
-  "Mode": 4,
+  "Color": "255, 10, 0",
+  "Brightness": 1,
+  "Mode": 1,
   "Static": {},
   "Strobing": {
     "Min": 0,
@@ -13,15 +13,18 @@
   "Breathing": {
     "Min": 0,
     "Max": 255,
-    "Sleep_ms": 10
+    "Sleep_ms": 10,
+    "ControllerBased": true
   },
   "ColorCycle": {
-    "Sleep_ms": 10
+    "Sleep_ms": 10,
+    "ControllerBased": true
   },
   "BreathingCycle": {
     "Sleep_ms": 9,
     "Min": 0,
-    "Max": 255
+    "Max": 255,
+    "ControllerBased": true
   },
   "ScreenGrab": {
     "Sleep_ms": 100,

@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -17,7 +15,7 @@ namespace rgbCase
         private ArduinoController mCtrl = null;
         private byte mBrightness = 255;
         private Brush _textureBrush;
-                
+
         public MainForm()
         {
             InitializeComponent();
@@ -62,7 +60,7 @@ namespace rgbCase
 
         private void btnConnect_Click(object sender, EventArgs e)
         {
-            if(InvokeRequired)
+            if (InvokeRequired)
             {
                 Invoke(new EventHandler(btnConnect_Click), new object[] { sender, e });
                 return;
@@ -79,6 +77,10 @@ namespace rgbCase
                 cmbBaud.Enabled = false;
                 txtMsg.Enabled = false;
                 btnSend.Enabled = false;
+                txtMode.Enabled = false;
+                txtModeP1.Enabled = false;
+                txtModeP2.Enabled = false;
+                btnSendMode.Enabled = false;
                 panelMaster.Enabled = false;
                 btnConnect.Enabled = false;
                 btnDisconnect.Enabled = false;
@@ -93,14 +95,15 @@ namespace rgbCase
                 mCtrl.MessageSend += MCtrl_MessageSend;
                 mCtrl.Connect(sPort, nBaud);
 
-                Task.Factory.StartNew(() => {
+                Task.Factory.StartNew(() =>
+                {
                     timerHeartBeat.Start();
                     Thread.Sleep(1000);
                     mCtrl.RequestBrightness(Brightness);
                     Thread.Sleep(1000);
                     mCtrl.RequestColor(Color);
                 });
-        }
+            }
             catch
             {
                 mCtrl = null;
@@ -115,6 +118,10 @@ namespace rgbCase
                 btnDisconnect.Enabled = true;
                 txtMsg.Enabled = true;
                 btnSend.Enabled = true;
+                txtMode.Enabled = true;
+                txtModeP1.Enabled = true;
+                txtModeP2.Enabled = true;
+                btnSendMode.Enabled = true;
                 panelMaster.Enabled = true;
             }
 
@@ -139,6 +146,10 @@ namespace rgbCase
             cmbBaud.Enabled = false;
             txtMsg.Enabled = false;
             btnSend.Enabled = false;
+            txtMode.Enabled = false;
+            txtModeP1.Enabled = false;
+            txtModeP2.Enabled = false;
+            btnSendMode.Enabled = false;
             panelMaster.Enabled = false;
             btnConnect.Enabled = false;
             btnDisconnect.Enabled = false;
@@ -163,7 +174,7 @@ namespace rgbCase
                 btnConnect.Enabled = true;
             }
         }
-        
+
         private void MCtrl_StateChangeReceived(ArduinoController.StateType nType, string sMessage)
         {
             //if (!checkLog.Checked)
@@ -207,7 +218,7 @@ namespace rgbCase
         {
             if (txtLog.Lines.Length < 1200)
                 return;
-             txtLog.Lines = txtLog.Lines.Skip(200).ToArray();
+            txtLog.Lines = txtLog.Lines.Skip(200).ToArray();
         }
 
         private void btnSend_Click(object sender, EventArgs e)
@@ -227,13 +238,27 @@ namespace rgbCase
             }
         }
 
+        private void btnSendMode_Click(object sender, EventArgs e)
+        {
+            if (mCtrl == null || !mCtrl.Connected)
+                return;
+
+            byte mode, p1, p2;
+            if (!byte.TryParse(txtMode.Text, out mode) || !byte.TryParse(txtModeP1.Text, out p1) || !byte.TryParse(txtModeP2.Text, out p2))
+            {
+                txtLog.AppendText(Environment.NewLine + "INVALID DATA IN MODE BOXES" + Environment.NewLine);
+                return;
+            }
+            mCtrl.RequestMode(mode, p1, p2);
+        }
+
         private void timerHeartBeat_Tick(object sender, EventArgs e)
         {
             if (mCtrl == null || !mCtrl.Connected)
                 return;
             mCtrl.RequestHeartBeat();
         }
-        
+
         /// <summary>
         /// Clean up any resources being used.
         /// </summary>
@@ -254,7 +279,7 @@ namespace rgbCase
             base.Dispose(disposing);
         }
 
-#region Color
+        #region Color
         public Color Color
         {
             get { return colorEditorManager.Color; }
@@ -285,7 +310,7 @@ namespace rgbCase
         delegate void ByteArgHandler(byte value);
         private void Brightness_Set(byte value)
         {
-            if(InvokeRequired)
+            if (InvokeRequired)
             {
                 Invoke(new ByteArgHandler(Brightness_Set), new object[] { value });
                 return;
@@ -300,6 +325,19 @@ namespace rgbCase
             if (mCtrl != null)
                 mCtrl.RequestBrightness(value);
             previewPanel.Invalidate();
+        }
+
+        delegate void ControllerModeArgHandler(byte value, byte p1, byte p2);
+        public void SetControllerMode(byte value, byte p1, byte p2)
+        {
+            if (InvokeRequired)
+            {
+                Invoke(new ControllerModeArgHandler(SetControllerMode), new object[] { value, p1, p2 });
+                return;
+            }
+
+            if (mCtrl != null)
+                mCtrl.RequestMode(value, p1, p2);
         }
 
         private void OnColorChanged(object sender, EventArgs e)
@@ -375,9 +413,9 @@ namespace rgbCase
                 mCtrl.RequestBrightness(Brightness);
             }
         }
-#endregion
+        #endregion
 
-#region Mode
+        #region Mode
         private BackgroundWorker mWorker;
         private EModes mMode;
         private void comboMode_SelectedIndexChanged(object sender, EventArgs e)
@@ -418,6 +456,9 @@ namespace rgbCase
             }
             else
             {
+                if (mCtrl != null)
+                    mCtrl.RequestMode(0, 0, 0);
+                Thread.Sleep(10);
                 effect.Init(this);
                 effect.Work(this);
             }
@@ -427,7 +468,7 @@ namespace rgbCase
         private delegate void SetVisibilityHandler(bool bBright, bool bColor);
         public void SetVisibility(bool bBright, bool bColor)
         {
-            if(InvokeRequired)
+            if (InvokeRequired)
             {
                 Invoke(new SetVisibilityHandler(SetVisibility), new object[] { bBright, bColor });
                 return;
@@ -459,7 +500,10 @@ namespace rgbCase
                 Effects.EffectBase effect = ((object[])e.Argument)[1] as Effects.EffectBase;
                 if (effect == null)
                     return;
-                
+
+                if (mCtrl != null)
+                    mCtrl.RequestMode(0, 0, 0);
+
                 effect.Init(this);
 
                 while (true)
@@ -471,11 +515,11 @@ namespace rgbCase
             }
             catch { e.Cancel = true; }
         }
-#endregion
+        #endregion
 
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if(sender == this && !m_UserClosing && e.CloseReason == CloseReason.UserClosing)
+            if (sender == this && !m_UserClosing && e.CloseReason == CloseReason.UserClosing)
             {
                 e.Cancel = true;
                 Hide();

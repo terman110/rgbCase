@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.IO;
 using System.IO.Ports;
 using System.Threading;
 using System.Threading.Tasks;
@@ -84,7 +83,7 @@ namespace rgbCase
 
         public delegate void StateChangeReceivedHandler(StateType nType, string sMessage);
         public event StateChangeReceivedHandler StateChangeReceived;
-        
+
         public ArduinoController()
         {
             mStartingThread = Thread.CurrentThread;
@@ -125,7 +124,8 @@ namespace rgbCase
 
                 mCancelTasks = new CancellationTokenSource();
                 mAliveTask = new Task(
-                    () => {
+                    () =>
+                    {
                         try
                         {
                             // specify this thread's Abort() as the cancel delegate
@@ -168,7 +168,7 @@ namespace rgbCase
 
             return Connected;
         }
-        
+
         public void Disconnect()
         {
             if (!Connected)
@@ -177,7 +177,7 @@ namespace rgbCase
             if (mCancelTasks != null)
             {
                 try { mCancelTasks.Cancel(); }
-                catch  { }
+                catch { }
                 try { mCancelTasks.Dispose(); }
                 catch { }
                 mCancelTasks = null;
@@ -322,7 +322,7 @@ namespace rgbCase
             }
             return sMsg;
         }
-                
+
         public void RequestHeartBeat()
         {
             if (!Connected || !mPort.IsOpen)
@@ -347,6 +347,15 @@ namespace rgbCase
                 return;
 
             try { Send(MessageType.Brightness, value); }
+            catch { }
+        }
+
+        public void RequestMode(byte value, byte p1, byte p2)
+        {
+            if (!Connected || !mPort.IsOpen)
+                return;
+
+            try { Send(MessageType.Mode, value, p1, p2); }
             catch { }
         }
 

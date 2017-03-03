@@ -52,6 +52,13 @@
             this.showToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.closeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.previewPanel = new rgbCase.DoubleBufferPanel();
+            this.txtMode = new System.Windows.Forms.TextBox();
+            this.txtModeP1 = new System.Windows.Forms.TextBox();
+            this.txtModeP2 = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.btnSendMode = new System.Windows.Forms.Button();
+            this.label2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
             this.groupConnection.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             this.panelTab.SuspendLayout();
@@ -364,6 +371,13 @@
             // 
             // tabConsole
             // 
+            this.tabConsole.Controls.Add(this.label3);
+            this.tabConsole.Controls.Add(this.label2);
+            this.tabConsole.Controls.Add(this.btnSendMode);
+            this.tabConsole.Controls.Add(this.label1);
+            this.tabConsole.Controls.Add(this.txtModeP2);
+            this.tabConsole.Controls.Add(this.txtModeP1);
+            this.tabConsole.Controls.Add(this.txtMode);
             this.tabConsole.Controls.Add(this.checkLog);
             this.tabConsole.Controls.Add(this.txtLog);
             this.tabConsole.Controls.Add(this.btnSend);
@@ -397,14 +411,14 @@
             this.txtLog.Name = "txtLog";
             this.txtLog.ReadOnly = true;
             this.txtLog.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.txtLog.Size = new System.Drawing.Size(530, 350);
+            this.txtLog.Size = new System.Drawing.Size(530, 327);
             this.txtLog.TabIndex = 2;
             // 
             // btnSend
             // 
             this.btnSend.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnSend.Enabled = false;
-            this.btnSend.Location = new System.Drawing.Point(461, 385);
+            this.btnSend.Location = new System.Drawing.Point(461, 358);
             this.btnSend.Name = "btnSend";
             this.btnSend.Size = new System.Drawing.Size(75, 23);
             this.btnSend.TabIndex = 1;
@@ -418,7 +432,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtMsg.Enabled = false;
             this.txtMsg.Font = new System.Drawing.Font("Lucida Console", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtMsg.Location = new System.Drawing.Point(6, 387);
+            this.txtMsg.Location = new System.Drawing.Point(6, 362);
             this.txtMsg.Name = "txtMsg";
             this.txtMsg.Size = new System.Drawing.Size(449, 18);
             this.txtMsg.TabIndex = 0;
@@ -478,6 +492,78 @@
             this.previewPanel.Size = new System.Drawing.Size(556, 17);
             this.previewPanel.TabIndex = 10;
             this.previewPanel.Paint += new System.Windows.Forms.PaintEventHandler(this.previewPanel_Paint);
+            // 
+            // txtMode
+            // 
+            this.txtMode.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.txtMode.Enabled = false;
+            this.txtMode.Font = new System.Drawing.Font("Lucida Console", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtMode.Location = new System.Drawing.Point(46, 389);
+            this.txtMode.Name = "txtMode";
+            this.txtMode.Size = new System.Drawing.Size(71, 18);
+            this.txtMode.TabIndex = 4;
+            // 
+            // txtModeP1
+            // 
+            this.txtModeP1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.txtModeP1.Enabled = false;
+            this.txtModeP1.Font = new System.Drawing.Font("Lucida Console", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtModeP1.Location = new System.Drawing.Point(175, 389);
+            this.txtModeP1.Name = "txtModeP1";
+            this.txtModeP1.Size = new System.Drawing.Size(71, 18);
+            this.txtModeP1.TabIndex = 5;
+            // 
+            // txtModeP2
+            // 
+            this.txtModeP2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.txtModeP2.Enabled = false;
+            this.txtModeP2.Font = new System.Drawing.Font("Lucida Console", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtModeP2.Location = new System.Drawing.Point(304, 389);
+            this.txtModeP2.Name = "txtModeP2";
+            this.txtModeP2.Size = new System.Drawing.Size(71, 18);
+            this.txtModeP2.TabIndex = 6;
+            // 
+            // label1
+            // 
+            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(6, 390);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(34, 13);
+            this.label1.TabIndex = 7;
+            this.label1.Text = "Mode";
+            // 
+            // btnSendMode
+            // 
+            this.btnSendMode.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btnSendMode.Enabled = false;
+            this.btnSendMode.Location = new System.Drawing.Point(461, 387);
+            this.btnSendMode.Name = "btnSendMode";
+            this.btnSendMode.Size = new System.Drawing.Size(75, 23);
+            this.btnSendMode.TabIndex = 8;
+            this.btnSendMode.Text = "Send";
+            this.btnSendMode.UseVisualStyleBackColor = true;
+            this.btnSendMode.Click += new System.EventHandler(this.btnSendMode_Click);
+            // 
+            // label2
+            // 
+            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(123, 390);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(46, 13);
+            this.label2.TabIndex = 9;
+            this.label2.Text = "Param 1";
+            // 
+            // label3
+            // 
+            this.label3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(252, 390);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(46, 13);
+            this.label3.TabIndex = 10;
+            this.label3.Text = "Param 2";
             // 
             // MainForm
             // 
@@ -549,6 +635,13 @@
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.ToolStripMenuItem showToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem closeToolStripMenuItem;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Button btnSendMode;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.TextBox txtModeP2;
+        private System.Windows.Forms.TextBox txtModeP1;
+        private System.Windows.Forms.TextBox txtMode;
     }
 }
 

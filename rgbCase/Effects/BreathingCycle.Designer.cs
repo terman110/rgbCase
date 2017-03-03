@@ -35,6 +35,7 @@
             this.mMinBright = new System.Windows.Forms.NumericUpDown();
             this.mMaxBright = new System.Windows.Forms.NumericUpDown();
             this.mDelay = new System.Windows.Forms.NumericUpDown();
+            this.mController = new System.Windows.Forms.CheckBox();
             this.tableLayoutPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.mMinBright)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.mMaxBright)).BeginInit();
@@ -52,6 +53,7 @@
             this.tableLayoutPanel2.Controls.Add(this.mMinBright, 1, 0);
             this.tableLayoutPanel2.Controls.Add(this.mMaxBright, 1, 1);
             this.tableLayoutPanel2.Controls.Add(this.mDelay, 1, 2);
+            this.tableLayoutPanel2.Controls.Add(this.mController, 1, 3);
             this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel2.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(0);
@@ -139,6 +141,18 @@
             0,
             0});
             // 
+            // mController
+            // 
+            this.mController.AutoSize = true;
+            this.mController.Enabled = false;
+            this.mController.Location = new System.Drawing.Point(78, 81);
+            this.mController.Name = "mController";
+            this.mController.Size = new System.Drawing.Size(69, 17);
+            this.mController.TabIndex = 7;
+            this.mController.Text = "Controller based";
+            this.mController.UseVisualStyleBackColor = true;
+            this.mController.CheckedChanged += new System.EventHandler(this.mController_CheckedChanged);
+            // 
             // BreathingCycle
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -164,5 +178,6 @@
         private System.Windows.Forms.NumericUpDown mMinBright;
         private System.Windows.Forms.NumericUpDown mMaxBright;
         private System.Windows.Forms.NumericUpDown mDelay;
+        private System.Windows.Forms.CheckBox mController;
     }
 }

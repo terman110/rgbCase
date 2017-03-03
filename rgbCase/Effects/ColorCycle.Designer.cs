@@ -31,6 +31,7 @@
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.label3 = new System.Windows.Forms.Label();
             this.mDelay = new System.Windows.Forms.NumericUpDown();
+            this.mController = new System.Windows.Forms.CheckBox();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.mDelay)).BeginInit();
             this.SuspendLayout();
@@ -42,6 +43,7 @@
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel1.Controls.Add(this.label3, 0, 0);
             this.tableLayoutPanel1.Controls.Add(this.mDelay, 1, 0);
+            this.tableLayoutPanel1.Controls.Add(this.mController, 1, 1);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(0);
@@ -86,6 +88,18 @@
             0});
             this.mDelay.ValueChanged += new System.EventHandler(this.mDelay_ValueChanged);
             // 
+            // mController
+            // 
+            this.mController.AutoSize = true;
+            this.mController.Enabled = false;
+            this.mController.Location = new System.Drawing.Point(78, 29);
+            this.mController.Name = "mController";
+            this.mController.Size = new System.Drawing.Size(69, 17);
+            this.mController.TabIndex = 7;
+            this.mController.Text = "Controller based";
+            this.mController.UseVisualStyleBackColor = true;
+            this.mController.CheckedChanged += new System.EventHandler(this.mController_CheckedChanged);
+            // 
             // ColorCycle
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -105,5 +119,6 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.NumericUpDown mDelay;
+        private System.Windows.Forms.CheckBox mController;
     }
 }
