@@ -38,12 +38,32 @@ namespace rgbCase
             slideBrightness.Value = (float)Brightness / 2.55f;
 
             Color = Settings.Instance.Color;
+            
+            Task.Factory.StartNew(() =>
+                {
+                    btnConnect_Click(null, null);
 
-            Task.Factory.StartNew(() => btnConnect_Click(null, null));
+                    EModes initMode = Settings.Instance.Mode;
 
-            comboMode.Items.AddRange(Enum.GetNames(typeof(EModes)));
-            if (comboMode.Items.Contains(Settings.Instance.Mode.ToString()))
-                comboMode.SelectedIndex = comboMode.Items.IndexOf(Settings.Instance.Mode.ToString());
+                    timerHeartBeat.Start();
+                    mCtrl.RequestMode(0, 0, 0);
+                    Thread.Sleep(1000);
+                    mCtrl.RequestBrightness(255);
+                    Thread.Sleep(1000);
+                    mCtrl.RequestColor(Color.Orange);
+
+                    BeginInvoke(new Action(() =>
+                    {
+                        comboMode.Items.AddRange(Enum.GetNames(typeof(EModes)));
+                        if (comboMode.Items.Contains(initMode.ToString()))
+                            comboMode.SelectedIndex = comboMode.Items.IndexOf(initMode.ToString());
+                    }
+                    )
+                );
+                }
+            );
+
+
 
 #if !DEBUG
             if(HideOnLaunch)
@@ -95,14 +115,15 @@ namespace rgbCase
                 mCtrl.MessageSend += MCtrl_MessageSend;
                 mCtrl.Connect(sPort, nBaud);
 
-                Task.Factory.StartNew(() =>
-                {
-                    timerHeartBeat.Start();
-                    Thread.Sleep(1000);
-                    mCtrl.RequestBrightness(Brightness);
-                    Thread.Sleep(1000);
-                    mCtrl.RequestColor(Color);
-                });
+                // Already covered by mode selection
+                //Task.Factory.StartNew(() =>
+                //{
+                //    timerHeartBeat.Start();
+                //    Thread.Sleep(1000);
+                //    mCtrl.RequestBrightness(Brightness);
+                //    Thread.Sleep(1000);
+                //    mCtrl.RequestColor(Color);
+                //});
             }
             catch
             {

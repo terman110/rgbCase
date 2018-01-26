@@ -22,6 +22,7 @@
 #include <avr/io.h> 
 #include <avr/wdt.h>
 #include <EEPROM.h>
+#include <Bounce2.h>
 
 #ifdef GAMMA_CORRECTION
 const uint8_t PROGMEM gamma8[] = {
@@ -57,9 +58,9 @@ int inputByte_5 = 0;
 
 byte brightness = 196;
 byte red = 255;
-byte green = 0;
-byte blue = 0;
-byte mode = 0;  // 0: PC send; 1: Breathing; 2: Color Circle; 3: Breathing Circle
+byte green = 128;
+byte blue = 128;
+byte mode = 1;  // 0: PC send; 1: Breathing; 2: Color Circle; 3: Breathing Circle
 byte mode_p0 = 0; // breating: delay; Color Circle: delay; Breathing Circle: delay
 byte mode_p1 = 0; // breating: minBrightness; Color Circle: 0; Breathing Circle: minBrightness
 
@@ -70,6 +71,10 @@ const int serialReadTimeout_us = 25;
 unsigned long lastCmd;
 unsigned long lastEEPROM;
 
+//  Debounce button object
+int pinBtn = 13;
+Bounce debouncer = Bounce();
+
 //Setup
 void setup()
 {  
@@ -77,6 +82,11 @@ void setup()
   pinMode(ledPin_g, OUTPUT);
   pinMode(ledPin_b, OUTPUT);
   
+  pinMode(pinBtn, INPUT);
+  digitalWrite(pinBtn, HIGH);
+  debouncer.attach(pinBtn);
+  debouncer.interval(5);
+
   Serial.begin(115200);
   
   lastCmd = millis();
@@ -88,6 +98,16 @@ void setup()
 //Main Loop
 void loop()
 {
+  if ( debouncer.update() && debouncer.read() == HIGH)
+  {
+    if(mode >= 3) mode = 0;
+    else ++mode;
+    Serial.write("Mode changed: ");
+    Serial.write(48+(int)mode);
+    Send(0x05, mode, 0x00, 0x00);
+    WriteEEPROM();
+  }
+  
   // Handling messages has highest priority
   HandleBuffer();
 
