@@ -1,4 +1,5 @@
-﻿using System;
+﻿using rgbCase.Base;
+using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
@@ -7,22 +8,14 @@ using System.Windows.Forms;
 
 namespace rgbCase.Effects
 {
-    internal partial class ScreenGrab :
+    public partial class ScreenGrab :
 #if DEBUG
         EffectBaseAbstractHack
 #else
         EffectBase
 #endif
     {
-        public class Parameter
-        {
-            public Parameter() { }
-
-            public uint Sleep_ms { get; set; } = 250;
-            public int Screen_Idx { get; set; } = 0;
-        }
-
-        public ScreenGrab(Parameter objParam) : base()
+        public ScreenGrab(Parameter.ScreenGrab objParam) : base()
         {
             InitializeComponent();
             Param = objParam;
@@ -39,11 +32,13 @@ namespace rgbCase.Effects
                 comboBox1.SelectedIndex = 0;
         }
 
-        public Parameter Param { get; set; }
+        public Parameter.ScreenGrab Param { get; set; }
+
+        public override IEffectParameter ParamI { get { return Param; } }
 
         public override bool IsAnimation { get { return true; } }
 
-        public override void Init(MainForm form)
+        public override void Init(IMainForm form)
         {
             form.Color = Color.Black;
             if (form.Brightness < 64)
@@ -51,7 +46,7 @@ namespace rgbCase.Effects
             form.SetVisibility(true, false);
         }
 
-        public override void Work(MainForm form)
+        public override void Work(IMainForm form)
         {
             int r = 0, g = 0, b = 0;
             Color c;

@@ -1,25 +1,18 @@
-﻿using System;
+﻿using rgbCase.Base;
+using System;
 using System.Drawing;
 using System.Threading;
 
 namespace rgbCase.Effects
 {
-    internal partial class ColorCycle :
+    public partial class ColorCycle :
 #if DEBUG
         EffectBaseAbstractHack
 #else
         EffectBase
 #endif
     {
-        public class Parameter
-        {
-            public Parameter() { }
-
-            public uint Sleep_ms { get; set; } = 9;
-            public bool ControllerBased { get; set; } = true;
-        }
-
-        public ColorCycle(Parameter objParam) : base()
+        public ColorCycle(Parameter.ColorCycle objParam) : base()
         {
             InitializeComponent();
             Param = objParam;
@@ -27,13 +20,15 @@ namespace rgbCase.Effects
             mController.Checked = Param.ControllerBased;
         }
 
-        public Parameter Param { get; set; }
+        public Parameter.ColorCycle Param { get; set; }
 
-        private MainForm Form { get; set; }
+        public override IEffectParameter ParamI { get { return Param; } }
+
+        private IMainForm Form { get; set; }
         
         public override bool IsAnimation { get { return !Param.ControllerBased; } }
 
-        public override void Init(MainForm form)
+        public override void Init(IMainForm form)
         {
             Thread.Sleep(10);
             Form = form;
@@ -48,7 +43,7 @@ namespace rgbCase.Effects
         }
 
         private uint nState { get; set; } = 0;
-        public override void Work(MainForm form)
+        public override void Work(IMainForm form)
         {
             if (Param.ControllerBased)
             {

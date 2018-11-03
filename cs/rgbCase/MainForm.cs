@@ -1,4 +1,5 @@
-﻿using System;
+﻿using rgbCase.Base;
+using System;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
@@ -10,9 +11,9 @@ using System.Windows.Forms;
 
 namespace rgbCase
 {
-    public partial class MainForm : Form
+    public partial class MainForm : Form, IMainForm
     {
-        private ArduinoController mCtrl = null;
+        private Arduino.Controller mCtrl = null;
         private byte mBrightness = 255;
         private Brush _textureBrush;
 
@@ -24,12 +25,20 @@ namespace rgbCase
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            Settings.Load();
 
-            cmbPort.Items.AddRange(ArduinoController.AvailablePorts);
+            try
+            {
+                Settings.Load();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error loading configuration:" + Environment.NewLine + ex.ToString(), "Error Loading Configuration", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+           
+            cmbPort.Items.AddRange(Arduino.Controller.AvailablePorts);
             if (cmbPort.Items.Contains(Settings.Instance.ComPort.ToString())) cmbPort.SelectedItem = Settings.Instance.ComPort.ToString();
             else if (cmbPort.Items.Count > 0) cmbPort.SelectedIndex = cmbBaud.Items.Count - 1;
-            cmbBaud.Items.AddRange(ArduinoController.AvailableBaudRates.Select(x => x.ToString()).ToArray());
+            cmbBaud.Items.AddRange(Arduino.Controller.AvailableBaudRates.Select(x => x.ToString()).ToArray());
             if (cmbBaud.Items.Contains(Settings.Instance.BaudRate.ToString())) cmbBaud.SelectedItem = Settings.Instance.BaudRate.ToString();
             else if (cmbBaud.Items.Count > 0) cmbBaud.SelectedIndex = cmbBaud.Items.Count - 1;
 
@@ -109,7 +118,7 @@ namespace rgbCase
                 int nBaud;
                 if (!int.TryParse(cmbBaud.SelectedItem.ToString(), out nBaud))
                     return;
-                mCtrl = new ArduinoController();
+                mCtrl = new Arduino.Controller();
                 mCtrl.MessageReceived += MCtrl_MessageReceived;
                 mCtrl.StateChangeReceived += MCtrl_StateChangeReceived;
                 mCtrl.MessageSend += MCtrl_MessageSend;
@@ -196,39 +205,39 @@ namespace rgbCase
             }
         }
 
-        private void MCtrl_StateChangeReceived(ArduinoController.StateType nType, string sMessage)
+        private void MCtrl_StateChangeReceived(Arduino.Controller.StateType nType, string sMessage)
         {
             //if (!checkLog.Checked)
             //    return;
             if (InvokeRequired)
             {
-                Invoke(new ArduinoController.StateChangeReceivedHandler(MCtrl_StateChangeReceived), new object[] { nType, sMessage });
+                Invoke(new Arduino.Controller.StateChangeReceivedHandler(MCtrl_StateChangeReceived), new object[] { nType, sMessage });
                 return;
             }
             txtLog.AppendText(DateTime.Now.ToString("HH:MM:SS.fff") + " [SC] " + nType.ToString() + ": " + sMessage.ToString() + Environment.NewLine);
             LineCheck();
         }
 
-        private void MCtrl_MessageReceived(ArduinoController.MessageType nType, string sMessage)
+        private void MCtrl_MessageReceived(Arduino.Controller.MessageType nType, string sMessage)
         {
             if (!checkLog.Checked)
                 return;
             if (InvokeRequired)
             {
-                Invoke(new ArduinoController.MessageReceivedHandler(MCtrl_MessageReceived), new object[] { nType, sMessage });
+                Invoke(new Arduino.Controller.MessageReceivedHandler(MCtrl_MessageReceived), new object[] { nType, sMessage });
                 return;
             }
             txtLog.AppendText(DateTime.Now.ToString("HH:MM:SS.fff") + " [<-] " + nType.ToString() + ": " + sMessage.ToString() + Environment.NewLine);
             LineCheck();
         }
 
-        private void MCtrl_MessageSend(ArduinoController.MessageType nType, string sMessage)
+        private void MCtrl_MessageSend(Arduino.Controller.MessageType nType, string sMessage)
         {
             if (!checkLog.Checked)
                 return;
             if (InvokeRequired)
             {
-                Invoke(new ArduinoController.MessageSendHandler(MCtrl_MessageSend), new object[] { nType, sMessage });
+                Invoke(new Arduino.Controller.MessageSendHandler(MCtrl_MessageSend), new object[] { nType, sMessage });
                 return;
             }
             txtLog.AppendText(DateTime.Now.ToString("HH:MM:SS.fff") + " [->] " + nType.ToString() + ": " + sMessage.ToString() + Environment.NewLine);
@@ -286,7 +295,14 @@ namespace rgbCase
         /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
-            Settings.Save();
+            try
+            {
+                Settings.Save();
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Error saving configuration:" + Environment.NewLine + e.ToString(), "Error Saving Configuration", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
 
             btnDisconnect_Click(null, null);
             if (_textureBrush != null)
@@ -460,7 +476,7 @@ namespace rgbCase
 
             panelParam.Controls.Clear();
 
-            Effects.EffectBase effect = Settings.Instance.GetEffect(mMode);
+            Effects.EffectBase effect = Effects.EffectBase.GetEffect(mMode);
             if (effect == null)
                 return;
 

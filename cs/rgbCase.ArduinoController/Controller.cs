@@ -5,7 +5,7 @@ using System.IO.Ports;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace rgbCase
+namespace rgbCase.Arduino
 {
     /// <summary>
     /// Arduino RGB Controller
@@ -30,7 +30,7 @@ namespace rgbCase
     /// Color Ack.      | 0x07      | red         | green       | blue
     /// Error           | 0xff      | err code 0  | err code 1  | err code 2
     /// </remarks>
-    public class ArduinoController : IDisposable
+    public class Controller : IDisposable
     {
         public enum MessageType
         {
@@ -74,6 +74,7 @@ namespace rgbCase
 
         static public string[] AvailablePorts { get { return SerialPort.GetPortNames(); } }
         static public int[] AvailableBaudRates { get { return new int[] { 300, 600, 1200, 2400, 4800, 9600, 14400, 19200, 28800, 38400, 57600, 115200 }; } }
+        static public string AvailableModes { get { return "Static, 0, 0, 0; Breathing, 1, Sleep_ms, MinBright; Color Cycle, 2, Sleep_ms, 0; Breathing Cycle, 3, Sleep_ms, MinBright"; } }
 
         public delegate void MessageReceivedHandler(MessageType nType, string sMessage);
         public event MessageReceivedHandler MessageReceived;
@@ -84,12 +85,12 @@ namespace rgbCase
         public delegate void StateChangeReceivedHandler(StateType nType, string sMessage);
         public event StateChangeReceivedHandler StateChangeReceived;
 
-        public ArduinoController()
+        public Controller()
         {
             mStartingThread = Thread.CurrentThread;
         }
 
-        public ArduinoController(string portName, int baud)
+        public Controller(string portName, int baud)
             : this()
         {
             Connect(portName, baud);
@@ -119,7 +120,8 @@ namespace rgbCase
                     RequestHeartBeat();
                     Settings.Instance.BaudRate = mBaud;
                     Settings.Instance.ComPort = mPortName;
-                    Settings.Save();
+                    try { Settings.Save(); }
+                    catch (Exception ex) { Console.WriteLine("ERR Unable to save settings: " + ex.ToString()); }
                 }
 
                 mCancelTasks = new CancellationTokenSource();

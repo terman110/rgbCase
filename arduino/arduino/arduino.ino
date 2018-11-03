@@ -21,7 +21,6 @@
 
 #include <avr/io.h> 
 #include <avr/wdt.h>
-#include <EEPROM.h>
 #include <Bounce2.h>
 
 #ifdef GAMMA_CORRECTION
@@ -58,9 +57,9 @@ int inputByte_5 = 0;
 
 byte brightness = 196;
 byte red = 255;
-byte green = 128;
-byte blue = 128;
-byte mode = 1;  // 0: PC send; 1: Breathing; 2: Color Circle; 3: Breathing Circle
+byte green = 109;
+byte blue = 0;
+byte mode = 0;  // 0: PC send; 1: Breathing; 2: Color Circle; 3: Breathing Circle
 byte mode_p0 = 0; // breating: delay; Color Circle: delay; Breathing Circle: delay
 byte mode_p1 = 0; // breating: minBrightness; Color Circle: 0; Breathing Circle: minBrightness
 
@@ -69,7 +68,6 @@ bool mode_forward = true;
 const int serialReadTimeout_us = 25;
 
 unsigned long lastCmd;
-unsigned long lastEEPROM;
 
 //  Debounce button object
 int pinBtn = 13;
@@ -90,9 +88,6 @@ void setup()
   Serial.begin(115200);
   
   lastCmd = millis();
-  lastEEPROM = millis();
-  
-  ReadEEPROM();
 }
 
 //Main Loop
@@ -105,7 +100,6 @@ void loop()
     Serial.write("Mode changed: ");
     Serial.write(48+(int)mode);
     Send(0x05, mode, 0x00, 0x00);
-    WriteEEPROM();
   }
   
   // Handling messages has highest priority
@@ -119,10 +113,6 @@ void loop()
   }
   
   SetColor(brightness, red, green, blue);
-
-  unsigned long duration_ms = millis() - lastEEPROM;
-  if(duration_ms >= 900000 || duration_ms < 0)
-    WriteEEPROM();
 }
 
 bool HasToChangeMode(byte vmin, byte vmax, bool forward)
@@ -258,7 +248,6 @@ bool HandleBuffer()
           case 2: ColorCircle_Init(); break;
           case 3: BreathingCircle_Init(); break;
         }
-        WriteEEPROM();
         break;
       case 0x06: // Color
         red = inputByte_2;
@@ -307,26 +296,3 @@ static void Send(byte bType, byte bD0, byte bD1, byte bD2)
   buf[5] = 0xff;
   Serial.write(buf, 6);
 }
-
-void WriteEEPROM()
-{
-  EEPROM.write(0, brightness);
-  EEPROM.write(1, red);
-  EEPROM.write(2, green);
-  EEPROM.write(3, blue);
-  EEPROM.write(4, mode);
-  EEPROM.write(5, mode_p0);
-  EEPROM.write(6, mode_p1);
-}
-
-void ReadEEPROM()
-{
-  brightness = EEPROM.read(0);
-  red = EEPROM.read(1);
-  green = EEPROM.read(2);
-  blue = EEPROM.read(3);
-  mode = EEPROM.read(4);
-  mode_p0 = EEPROM.read(5);
-  mode_p1 = EEPROM.read(6);
-}
-

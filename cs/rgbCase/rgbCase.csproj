@@ -9,9 +9,10 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>rgbCase</RootNamespace>
     <AssemblyName>rgbCase</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -41,10 +42,6 @@
     <ApplicationIcon>Resources\rgbIcon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -58,55 +55,53 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ArduinoController.cs" />
     <Compile Include="DoubleBufferPanel.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Effects\BreathingCycle.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Effects\BreathingCycle.Designer.cs">
-      <DependentUpon>BreathingCycle.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Effects\ScreenGrab.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Effects\ScreenGrab.Designer.cs">
-      <DependentUpon>ScreenGrab.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Effects\ColorCycle.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Effects\ColorCycle.Designer.cs">
-      <DependentUpon>ColorCycle.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Effects\EffectBase.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Effects\Breathing.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Effects\Breathing.Designer.cs">
-      <DependentUpon>Breathing.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Effects\Strobing.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Effects\Strobing.Designer.cs">
-      <DependentUpon>Strobing.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Effects\Static.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Effects\Static.Designer.cs">
-      <DependentUpon>Static.cs</DependentUpon>
-    </Compile>
-    <Compile Include="EModes.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Effects\GUI\Breathing.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Effects\GUI\Breathing.Designer.cs">
+      <DependentUpon>Breathing.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Effects\GUI\BreathingCycle.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Effects\GUI\BreathingCycle.Designer.cs">
+      <DependentUpon>BreathingCycle.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Effects\GUI\ColorCycle.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Effects\GUI\ColorCycle.Designer.cs">
+      <DependentUpon>ColorCycle.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Effects\GUI\EffectBase.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Effects\GUI\ScreenGrab.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Effects\GUI\ScreenGrab.Designer.cs">
+      <DependentUpon>ScreenGrab.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Effects\GUI\Static.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Effects\GUI\Static.Designer.cs">
+      <DependentUpon>Static.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Effects\GUI\Strobing.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Effects\GUI\Strobing.Designer.cs">
+      <DependentUpon>Strobing.cs</DependentUpon>
     </Compile>
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
@@ -116,20 +111,19 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Settings.cs" />
-    <EmbeddedResource Include="Effects\BreathingCycle.resx">
-      <DependentUpon>BreathingCycle.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Effects\ScreenGrab.resx">
-      <DependentUpon>ScreenGrab.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Effects\ColorCycle.resx">
-      <DependentUpon>ColorCycle.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Effects\Breathing.resx">
+    <EmbeddedResource Include="Effects\GUI\Breathing.resx">
       <DependentUpon>Breathing.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Effects\Strobing.resx">
+    <EmbeddedResource Include="Effects\GUI\BreathingCycle.resx">
+      <DependentUpon>BreathingCycle.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Effects\GUI\ColorCycle.resx">
+      <DependentUpon>ColorCycle.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Effects\GUI\ScreenGrab.resx">
+      <DependentUpon>ScreenGrab.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Effects\GUI\Strobing.resx">
       <DependentUpon>Strobing.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
@@ -145,7 +139,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -164,6 +157,22 @@
     <ProjectReference Include="..\Cyotek.Windows.Forms.ColorPicker\Cyotek.Windows.Forms.ColorPicker.csproj">
       <Project>{fb2a5786-cd2e-42ce-bc5d-0fce90034221}</Project>
       <Name>Cyotek.Windows.Forms.ColorPicker</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\rgbCase.ArduinoController\rgbCase.Arduino.csproj">
+      <Project>{dbc4dc23-f829-45df-ab9d-de40c05f0bd4}</Project>
+      <Name>rgbCase.Arduino</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\rgbCase.Base\rgbCase.Base.csproj">
+      <Project>{6f5e957b-7760-4929-bc12-2f2a20849067}</Project>
+      <Name>rgbCase.Base</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\rgbCase.Effects\rgbCase.Effects.csproj">
+      <Project>{f9dff1aa-e988-4ec0-946e-6a3e5b67170e}</Project>
+      <Name>rgbCase.Effects</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\rgbCase.Settings\rgbCase.Settings.csproj">
+      <Project>{790ab43d-f43d-4265-98b2-cacd2a69f867}</Project>
+      <Name>rgbCase.Settings</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

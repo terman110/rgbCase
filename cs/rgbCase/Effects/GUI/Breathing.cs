@@ -1,42 +1,36 @@
-﻿using System;
+﻿using rgbCase.Base;
+using System;
 using System.Threading;
 
 namespace rgbCase.Effects
 {
-    internal partial class Breathing :
+    public partial class Breathing :
 #if DEBUG
         EffectBaseAbstractHack
 #else
         EffectBase
 #endif
     {
-        public class Parameter
+        public Breathing(Parameter.Breathing objParam) : base()
         {
-            public Parameter() { }
-
-            public byte Min { get; set; } = 0;
-            public byte Max { get; set; } = 255;
-            public uint Sleep_ms { get; set; } = 10;
-            public bool ControllerBased { get; set; } = true;
-        }
-
-        public Breathing(Parameter objParam) : base()
-        {
-            InitializeComponent();
             Param = objParam;
+
+            InitializeComponent();
             mMinBright.Value = Param.Min;
             mMaxBright.Value = Param.Max;
             mDelay.Value = Param.Sleep_ms;
             mController.Checked = Param.ControllerBased;
         }
 
-        public Parameter Param { get; set; }
+        public Parameter.Breathing Param { get; set; }
 
-        private MainForm Form { get; set; }
+        public override IEffectParameter ParamI { get { return Param; } }
 
-        public override bool IsAnimation { get { return !Param.ControllerBased; } }
+        private IMainForm Form { get; set; }
 
-        public override void Init(MainForm form)
+        public override bool IsAnimation { get { return !this.Param.ControllerBased; } }
+
+        public override void Init(IMainForm form)
         {
             Thread.Sleep(10);
             Form = form;
@@ -48,7 +42,7 @@ namespace rgbCase.Effects
         }
 
         private bool bForward = true;
-        public override void Work(MainForm form)
+        public override void Work(IMainForm form)
         {
             if (Param.ControllerBased)
             {

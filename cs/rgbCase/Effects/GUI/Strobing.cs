@@ -1,25 +1,17 @@
-﻿using System;
+﻿using rgbCase.Base;
+using System;
 using System.Threading;
 
 namespace rgbCase.Effects
 {
-    internal partial class Strobing :
+    public partial class Strobing :
 #if DEBUG
         EffectBaseAbstractHack
 #else
         EffectBase
 #endif
     {
-        public class Parameter
-        {
-            public Parameter() { }
-
-            public byte Min { get; set; } = 0;
-            public byte Max { get; set; } = 255;
-            public uint Sleep_ms { get; set; } = 250;
-        }
-
-        public Strobing(Parameter objParam) : base()
+        public Strobing(Parameter.Strobing objParam) : base()
         {
             InitializeComponent();
             Param = objParam;
@@ -28,16 +20,18 @@ namespace rgbCase.Effects
             mDelay.Value = Param.Sleep_ms;
         }
 
-        public Parameter Param { get; set; }
+        public Parameter.Strobing Param { get; set; }
+
+        public override IEffectParameter ParamI { get { return Param; } }
 
         public override bool IsAnimation { get { return true; } }
 
-        public override void Init(MainForm form)
+        public override void Init(IMainForm form)
         {
             form.SetVisibility(false, true);
         }
 
-        public override void Work(MainForm form)
+        public override void Work(IMainForm form)
         {
             form.Brightness = (byte)(form.Brightness > Param.Min + (Param.Max - Param.Min) / 2 ? Param.Min : Param.Max);
             Thread.Sleep((int)Param.Sleep_ms);

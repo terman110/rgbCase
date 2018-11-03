@@ -1,11 +1,21 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2050
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "rgbCase", "rgbCase\rgbCase.csproj", "{3D6007F1-3B1B-4E71-9AEF-CF7135A35D36}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cyotek.Windows.Forms.ColorPicker", "Cyotek.Windows.Forms.ColorPicker\Cyotek.Windows.Forms.ColorPicker.csproj", "{FB2A5786-CD2E-42CE-BC5D-0FCE90034221}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "rgbCase.Arduino", "rgbCase.ArduinoController\rgbCase.Arduino.csproj", "{DBC4DC23-F829-45DF-AB9D-DE40C05F0BD4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "rgbCase.Settings", "rgbCase.Settings\rgbCase.Settings.csproj", "{790AB43D-F43D-4265-98B2-CACD2A69F867}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "rgbCase.Effects", "rgbCase.Effects\rgbCase.Effects.csproj", "{F9DFF1AA-E988-4EC0-946E-6A3E5B67170E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "rgbCase.Base", "rgbCase.Base\rgbCase.Base.csproj", "{6F5E957B-7760-4929-BC12-2F2A20849067}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "rgbCase.CLI", "rgbCase.CLI\rgbCase.CLI.csproj", "{56EA4113-8B21-46F0-B8F5-9BBDE7CB55BB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,8 +31,31 @@ Global
 		{FB2A5786-CD2E-42CE-BC5D-0FCE90034221}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FB2A5786-CD2E-42CE-BC5D-0FCE90034221}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FB2A5786-CD2E-42CE-BC5D-0FCE90034221}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DBC4DC23-F829-45DF-AB9D-DE40C05F0BD4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DBC4DC23-F829-45DF-AB9D-DE40C05F0BD4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DBC4DC23-F829-45DF-AB9D-DE40C05F0BD4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DBC4DC23-F829-45DF-AB9D-DE40C05F0BD4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{790AB43D-F43D-4265-98B2-CACD2A69F867}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{790AB43D-F43D-4265-98B2-CACD2A69F867}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{790AB43D-F43D-4265-98B2-CACD2A69F867}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{790AB43D-F43D-4265-98B2-CACD2A69F867}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F9DFF1AA-E988-4EC0-946E-6A3E5B67170E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F9DFF1AA-E988-4EC0-946E-6A3E5B67170E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F9DFF1AA-E988-4EC0-946E-6A3E5B67170E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F9DFF1AA-E988-4EC0-946E-6A3E5B67170E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6F5E957B-7760-4929-BC12-2F2A20849067}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6F5E957B-7760-4929-BC12-2F2A20849067}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6F5E957B-7760-4929-BC12-2F2A20849067}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6F5E957B-7760-4929-BC12-2F2A20849067}.Release|Any CPU.Build.0 = Release|Any CPU
+		{56EA4113-8B21-46F0-B8F5-9BBDE7CB55BB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{56EA4113-8B21-46F0-B8F5-9BBDE7CB55BB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{56EA4113-8B21-46F0-B8F5-9BBDE7CB55BB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{56EA4113-8B21-46F0-B8F5-9BBDE7CB55BB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {850E4DFD-EDB4-4445-A3F3-AC63358931AF}
 	EndGlobalSection
 EndGlobal

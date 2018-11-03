@@ -1,27 +1,18 @@
-﻿using System;
+﻿using rgbCase.Base;
+using System;
 using System.Drawing;
 using System.Threading;
 
 namespace rgbCase.Effects
 {
-    internal partial class BreathingCycle :
+    public partial class BreathingCycle :
 #if DEBUG
         EffectBaseAbstractHack
 #else
         EffectBase
 #endif
     {
-        public class Parameter
-        {
-            public Parameter() { }
-
-            public uint Sleep_ms { get; set; } = 9;
-            public byte Min { get; set; } = 0;
-            public byte Max { get; set; } = 255;
-            public bool ControllerBased { get; set; } = true;
-        }
-
-        public BreathingCycle(Parameter objParam) : base()
+        public BreathingCycle(Parameter.BreathingCycle objParam) : base()
         {
             InitializeComponent();
             Param = objParam;
@@ -34,13 +25,15 @@ namespace rgbCase.Effects
             names = (KnownColor[])Enum.GetValues(typeof(KnownColor));
         }
 
-        public Parameter Param { get; set; }
+        public Parameter.BreathingCycle Param { get; set; }
 
-        private MainForm Form { get; set; }
+        public override IEffectParameter ParamI { get { return Param; } }
+
+        private IMainForm Form { get; set; }
 
         public override bool IsAnimation { get { return !Param.ControllerBased; } }
 
-        public override void Init(MainForm form)
+        public override void Init(IMainForm form)
         {
             Thread.Sleep(10);
             form.Color = Color.FromKnownColor(names[randomGen.Next(names.Length)]);
@@ -57,7 +50,7 @@ namespace rgbCase.Effects
         private bool bForward = true;
         Random randomGen;
         KnownColor[] names;
-        public override void Work(MainForm form)
+        public override void Work(IMainForm form)
         {
             if (Param.ControllerBased)
             {
